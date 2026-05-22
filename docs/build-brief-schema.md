@@ -25,6 +25,11 @@ first_unit_review: true                # true = build one unit, pause for review
                                        # then replicate; false = build all at once
 template:     VA2-DC                   # closest bundled P6 template (skill ref 12)
 
+scheduling:                            # the scheduling basis (skill ref 14)
+  actuals:    applied                  # applied = status-updated to data_date | none = clean baseline
+  milestones: to-contract              # to-contract = pin contract dates (CS_MEOB),
+                                       # show float | forecast = milestones free
+
 units:                                 # the repeating spatial-temporal unit
   type:          Data Hall             # Data Hall / Phase / Unit - owner-specific
   count:         4
@@ -95,3 +100,19 @@ crew-level trade data - absent that, the builder emits a flagged shell.
 
 Default to `true`. A wrong pattern caught on one unit is far cheaper to fix than
 the same error replicated across every unit in the schedule.
+
+## Scheduling basis (`scheduling`)
+
+Two independent fields fix how the schedule is scheduled — set both:
+
+- **`actuals`** — `applied` builds a status-updated schedule (actual start /
+  finish / % from the sources, remaining work forecast forward from the data
+  date); `none` builds a clean baseline plan (all `TK_NotStart`).
+- **`milestones`** — `to-contract` pins each contractual milestone with a
+  `CS_MEOB` constraint at its contract date, so the schedule shows float (and
+  negative float) to contract; `forecast` leaves milestones unconstrained to fall
+  out of logic, with the predicted-vs-contract variance reported separately.
+
+The usual owner-side control schedule is `actuals: applied` + `milestones:
+to-contract`. Full mechanics — both passes, constraint codes, how float reads —
+are in `references/14-scheduling-basis.md`.

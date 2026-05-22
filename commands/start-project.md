@@ -118,6 +118,13 @@ Collect the following, asking one focused thing at a time:
    Default and recommendation: pause for review - a wrong pattern caught on one
    unit is far cheaper than the same error replicated across every unit. Record
    as `first_unit_review` (true / false) in the build-brief.
+8. **Scheduling basis** - two questions (see the skill's
+   `references/14-scheduling-basis.md`): (a) **actuals** - is the schedule
+   status-updated to the data date with real progress, or a clean baseline plan?
+   (b) **milestones** - are the contractual milestones pinned to their contract
+   dates (so the schedule shows float / negative float to contract), or left free
+   as a forward forecast? Record as `scheduling.actuals` (applied / none) and
+   `scheduling.milestones` (to-contract / forecast).
 
 Use the skill's `references/05-project-kickoff-checklist.md` as the backing
 checklist - it is the long-form version of this interview.

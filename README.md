@@ -20,7 +20,7 @@ center schedules. It does two jobs:
   `lessons-harvester` (lessons review)
 - `scripts/` - the change-set pipeline (apply / verify / predict / review) on a
   shared `xer_io` + `operations` core
-- `skills/data-center-schedule/` - the bundled domain skill: 13 references, P6
+- `skills/data-center-schedule/` - the bundled domain skill: 14 references, P6
   reference templates, the activity catalog, and the build / validate / parse toolkit
 - `docs/` - `build-brief-schema.md`, `changeset-schema.md`, `project-schema.md`,
   `pipeline-cli.md`, `lessons-pipeline.md`, `multi-device-setup.md`, `setup-guide.md`

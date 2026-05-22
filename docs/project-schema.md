@@ -25,6 +25,10 @@ paths:                                          # all relative to the project fo
 milestones:
   contract_pattern: "MS-.*-(EFA|FA|FR|RFS)$|MS-ADMIN-SC$"
 
+scheduling:                                     # the scheduling basis (skill ref 14)
+  actuals:    applied                           # applied = status-updated | none = baseline
+  milestones: to-contract                       # to-contract = contract dates pinned | forecast = free
+
 source_of_truth:                                # highest authority first
   - "Contractual milestone dates + definitions"
   - "Sub-detailed (electrical / mechanical) schedules + meeting notes"
@@ -50,6 +54,7 @@ There are two consumers: the **pipeline scripts** (Python) and the **assistant**
 | `paths.*` | assistant | Where the assistant reads inputs and writes outputs in each phase. |
 | `source_of_truth` | assistant | The conflict-resolution order to apply when sources disagree. |
 | `conventions.*` | assistant | The predecessor / constraint conventions the assistant applies and documents. |
+| `scheduling.*` | assistant | The scheduling basis - `actuals` (applied / none) and `milestones` (to-contract / forecast) - the assistant builds and updates the schedule to. See `references/14-scheduling-basis.md`. |
 
 ## The milestone pattern - the portability hinge
 

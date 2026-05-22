@@ -76,6 +76,10 @@ v1.15 (2026-05-22): Full sanitization -- genericized every reference to the
                    and building codes are now generic ("the owner", "the
                    electrical contractor", "the reference project", etc.). The
                    lessons and patterns are unchanged; only the names are gone.
+v1.16 (2026-05-22): Added reference 14 (scheduling basis -- the actuals and
+                   milestone-treatment axes, both CPM passes, constraint codes,
+                   and how float reads); registered it in the reference table.
+                   Pairs with the build-brief's new `scheduling` block.
 -->
 
 # Data Center Schedule Toolkit
@@ -147,6 +151,7 @@ For each phase, you'll need different references. Reading just `SKILL.md` is not
 | Any phase (what the equipment does, construction staging) | `references/11-infrastructure-primer.md` |
 | Phase 1 (what the bundled reference XERs teach) | `references/12-reference-template-library.md` |
 | Phase 3 (activity catalog + typical durations) | `references/13-activity-catalog.md` |
+| Phase 3 (scheduling basis -- actuals + milestone constraints) | `references/14-scheduling-basis.md` |
 
 ### Step 4 — Build with the bundled scripts
 

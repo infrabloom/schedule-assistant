@@ -108,5 +108,5 @@ After that, each update cycle is:
 - A malformed input aborts the run - it never hands over a half-applied schedule.
 
 The bundled `data-center-schedule` skill provides the domain framework - the
-7-phase method, the 13 references, the P6 templates, and the validators - that
+7-phase method, the 14 references, the P6 templates, and the validators - that
 both commands run on.

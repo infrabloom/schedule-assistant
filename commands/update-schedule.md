@@ -58,6 +58,8 @@ YAML per docs/changeset-schema.md:
 - never invent a duration or a logic tie - cite the trade schedule, the equipment
   list, or the contract document it came from
 - keep predicted_impact brief; the Impact preview computes the real numbers
+- respect the project's scheduling basis (`project.yaml` `scheduling`) - keep
+  milestone constraints and actuals consistent with it (see `references/14-scheduling-basis.md`)
 Save as changesets/CS-NNN-<slug>.yaml. Write it via the shell (reliable on this folder).
 
 ## Impact preview · update phase 3

@@ -69,7 +69,10 @@ Then set the **target schedule level (Level 1-5)** per `references/09-schedule-l
 - L1 milestone, L2 summary, L3 control CPM, L4 execution, L5 look-ahead -
 confirm the repeating-unit count + stagger, and set the **build mode**
 (`first_unit_review`: build the first unit and pause for your review - the default
-and recommendation - or build the whole schedule at once).
+and recommendation - or build the whole schedule at once). Set the **scheduling
+basis** too - `scheduling.actuals` (status-updated to actuals, or a clean
+baseline) and `scheduling.milestones` (contract milestones pinned, or a free
+forecast); see `references/14-scheduling-basis.md`.
 
 Write `build-brief.yaml`. **CHECKPOINT - present the brief before extraction.**
 
@@ -90,6 +93,12 @@ the "source" is the chosen template plus the skill references.
 - Define predecessor logic per discipline - cite the source for every tie and
   every duration; never invent one. Stamp the per-equipment start-up micro-chain
   from `13-activity-catalog.md` onto each equipment assembly.
+- Apply the **scheduling basis** (`references/14-scheduling-basis.md`): if the
+  brief's `scheduling.milestones` is `to-contract`, every contractual milestone
+  gets a `CS_MEOB` constraint at its contract date; if `forecast`, milestones stay
+  unconstrained. If `scheduling.actuals` is `applied`, actual start / finish / %
+  are applied through the data date and remaining work forecasts forward; if
+  `none`, the build is a clean baseline (all `TK_NotStart`).
 - Start the assumptions register - every non-sourced number goes here.
 **CHECKPOINT - present catalog + logic + assumptions before building.**
 

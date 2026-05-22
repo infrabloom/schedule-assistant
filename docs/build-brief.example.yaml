@@ -15,6 +15,10 @@ mode:         full-input            # full-input | minimal-input
 first_unit_review: true             # true = build one unit, pause for your review, then replicate; false = build the whole schedule at once
 template:     VA2-DC                # closest bundled reference template
 
+scheduling:                         # the scheduling basis (skill ref 14)
+  actuals:    applied               # applied = status-updated to data_date | none = clean baseline plan
+  milestones: to-contract           # to-contract = pin contract dates as CS_MEOB, show float | forecast = milestones free
+
 units:
   type:          Data Hall
   count:         4

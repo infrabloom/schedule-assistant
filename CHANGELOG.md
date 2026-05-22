@@ -10,11 +10,25 @@ docs, and the bundled `data-center-schedule` skill. Follows semantic versioning.
 > caused it. This file tracks the **tool**, not any one schedule.
 
 The bundled skill carries its own finer-grained version line in
-`skills/data-center-schedule/SKILL.md` (currently v1.15). The plugin version and
+`skills/data-center-schedule/SKILL.md` (currently v1.16). The plugin version and
 the skill version move independently; each plugin release bundles whatever skill
 version was current at the time.
 
 ---
+
+## 0.5.6 — 2026-05-22 — Scheduling basis is now explicit
+
+- New build-brief / `project.yaml` block **`scheduling`** with two fields:
+  `actuals` (`applied` = status-updated to the data date · `none` = clean
+  baseline) and `milestones` (`to-contract` = pin contract dates as `CS_MEOB`
+  constraints and show float · `forecast` = leave milestones free, compare to
+  contract separately).
+- `/start-project` asks for both in its interview; `/build-schedule` builds to
+  them — milestone constraints and actuals are now a deliberate, recorded choice
+  instead of implicit.
+- New skill reference **`14-scheduling-basis.md`** documents the P6 mechanics:
+  both CPM passes, the OPC-safe constraint codes, how float reads, and the common
+  combinations. Bundled skill → v1.16.
 
 ## 0.5.5 — 2026-05-22 — Staged build is a choice, and a real hard stop
 
