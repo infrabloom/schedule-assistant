@@ -4,7 +4,7 @@
   "plugins": [
     {
       "name": "schedule-assistant",
-      "source": ".",
+      "source": { "source": "url", "url": "https://github.com/infrabloom/schedule-assistant.git" },
       "description": "Full-lifecycle P6 / OPC data center schedule assistant: build new schedules and maintain them through verified change-sets."
     }
   ]
