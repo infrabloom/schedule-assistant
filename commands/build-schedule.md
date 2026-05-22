@@ -19,6 +19,12 @@ Locations:
 Before starting, read the skill: `SKILL.md`, then `references/01-phased-workflow.md`,
 `references/06-lessons-learned.md`, and `references/11-infrastructure-primer.md`.
 
+> **Precondition - the project must be set up first.** This command builds *into
+> an existing project folder*. Before anything else, check that the folder has
+> the `inputs/`, `outputs/`, and `changesets/` structure. If it does not, the
+> project has not been set up - **stop and tell the user to run `/start-project`
+> first.** `/build-schedule` does not scaffold the folder; it expects it to exist.
+
 > **Phase numbering.** The phases below are scoped to the **build workflow** only.
 > They are not the same phases as `/update-schedule`, `/harvest-lessons`, or the
 > skill's build method (`references/01-phased-workflow.md`). Each section leads

@@ -16,6 +16,21 @@ version was current at the time.
 
 ---
 
+## 0.5.1 — 2026-05-22 — /start-project fixes from the first test run
+
+- **Scaffold first.** `/start-project` now creates the project folder structure
+  (`inputs/ outputs/ inbox/ changesets/` + seeded `CHANGELOG.md` /
+  `lessons-log.md`) as its unmissable first action, before any interview — so the
+  build/update commands never find an empty folder.
+- **Input files go in the folder, not the chat.** The intake step moved up (right
+  after scaffolding) and now explicitly tells the user to copy files into
+  `inputs/` with their file manager — uploading large schedule files into the
+  conversation bloats it.
+- **Generic milestone interview.** Dropped the preloaded `EFA / FA` examples; the
+  interview asks the user for their own milestone codes without steering.
+- **`/build-schedule` precondition.** It now checks the project folder is set up
+  and tells the user to run `/start-project` first if not, instead of stumbling.
+
 ## 0.5.0 — 2026-05-22 — New command: /start-project
 
 - Added the **`/start-project`** command — the on-ramp for a new project, run
