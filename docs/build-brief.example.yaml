@@ -1,0 +1,41 @@
+# build-brief.yaml -- the contract for /build-schedule.
+# Copy this to your project folder as build-brief.yaml and fill it in.
+# Schema + field docs: docs/build-brief-schema.md
+
+project:
+  id:         CB5
+  name:       CB5 Hyperscale DC Build
+  owner:      TeraWulf
+  gc:         TBD
+  data_date:  2026-06-01
+  calendar:   7d-8h                 # 7-day, 8 hours/day
+
+detail_level: 3                     # 1 milestone | 2 summary | 3 control CPM | 4 execution | 5 look-ahead
+mode:         full-input            # full-input | minimal-input
+template:     VA2-DC                # closest bundled reference template
+
+units:
+  type:          Data Hall
+  count:         4
+  sequence:      [DH1, DH2, DH3, DH4]
+  stagger_weeks: 3                  # CONFIRM with the GC -- do not assume
+
+milestones:
+  - {code: EFA, name: Early First Access, definition: "TBD - get in writing", date: TBD}
+  - {code: FA,  name: Facility Access,    definition: "TBD - get in writing", date: TBD}
+  - {code: FR,  name: Facility Ready,     definition: "TBD - get in writing", date: TBD}
+  - {code: RFS, name: Ready For Service,  definition: "TBD - get in writing", date: TBD}
+
+inputs:
+  # - {file: <name>, role: template|client-context|good-schedule|bad-schedule|trade-schedule|mel}
+
+source_of_truth:
+  - client-context
+  - trade-schedule
+  - good-schedule
+  - template
+  - bad-schedule
+
+notes: |
+  Replace every TBD before the Brief & classify checkpoint. Confirm the stagger and the
+  milestone definitions with the GC / owner in writing -- never assume them.

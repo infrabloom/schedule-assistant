@@ -1,0 +1,9 @@
+# schedule-assistant - runtime dependencies
+#
+# Python 3.9 or newer is required: the bundled scripts use PEP 585 builtin
+# generics (e.g. list[str]), which arrived in Python 3.9.
+#
+# Install:  pip install -r requirements.txt
+#   (on Debian/Ubuntu system Python you may need: --break-system-packages)
+
+PyYAML>=5.1

@@ -1,0 +1,11 @@
+{
+  "name": "schedule-assistant",
+  "owner": { "name": "Patrick Al Asseily" },
+  "plugins": [
+    {
+      "name": "schedule-assistant",
+      "source": ".",
+      "description": "Full-lifecycle P6 / OPC data center schedule assistant: build new schedules and maintain them through verified change-sets."
+    }
+  ]
+}
