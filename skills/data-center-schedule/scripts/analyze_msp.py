@@ -16,7 +16,7 @@ Then cross-check:
 
 Usage:
     python analyze_msp.py <msp.xml> [<msp.xml> ...]
-    (each argument may be a glob, e.g.  "OCE XML/*.xml")
+    (each argument may be a glob, e.g.  "trade-schedules/*.xml")
 """
 import sys, glob, os
 from datetime import datetime, timedelta
@@ -71,7 +71,7 @@ def main():
     args = sys.argv[1:]
     if not args:
         print("usage: python analyze_msp.py <msp.xml> [<msp.xml> ...]")
-        print('       each argument may be a glob, e.g.  "OCE XML/*.xml"')
+        print('       each argument may be a glob, e.g.  "trade-schedules/*.xml"')
         sys.exit(2)
     files = []
     for a in args:

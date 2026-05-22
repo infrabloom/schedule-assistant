@@ -10,8 +10,8 @@ as `build-brief.yaml` and fill it in.
 
 ```yaml
 project:
-  id:         CB5                      # short code, used in filenames
-  name:       CB5 Hyperscale DC Build
+  id:         DC1                      # short code, used in filenames
+  name:       DC1 Hyperscale DC Build
   owner:      OWNER                    # the entity the schedule belongs to
   gc:         GC                       # general contractor
   data_date:  2026-06-01               # the "now" line for the build
@@ -21,6 +21,8 @@ detail_level: 3                        # target schedule level 1-5 (skill ref 09
                                        # 1 milestone | 2 summary | 3 control CPM
                                        # 4 execution | 5 look-ahead
 mode:         full-input               # full-input | minimal-input
+first_unit_review: true                # true = build one unit, pause for review,
+                                       # then replicate; false = build all at once
 template:     VA2-DC                   # closest bundled P6 template (skill ref 12)
 
 units:                                 # the repeating spatial-temporal unit
@@ -37,8 +39,8 @@ milestones:                            # contractual milestones (per unit)
 
 inputs:                                # every file in inputs/, role-tagged
   - {file: prior-GC-schedule.xer, role: bad-schedule}    # actuals only
-  - {file: OCE-electrical.xml,    role: trade-schedule}
-  - {file: MLP-mechanical.xml,    role: trade-schedule}
+  - {file: electrical-trade.xml,  role: trade-schedule}
+  - {file: mechanical-trade.xml,  role: trade-schedule}
   - {file: equipment-list.csv,    role: mel}
   - {file: turnover-dates.pdf,    role: client-context}
 
@@ -79,3 +81,17 @@ delivered as a clearly-marked DRAFT.
 L3 is the usual owner-side control schedule. L1 / L2 are summary roll-ups;
 L4 / L5 explode each L3 activity into work packages / daily tasks and need
 crew-level trade data - absent that, the builder emits a flagged shell.
+
+## Build mode (`first_unit_review`)
+
+`first_unit_review` controls how `/build-schedule` runs:
+
+- **`true` (default)** - the builder builds the first repeating unit (one Data
+  Hall / Phase) in full, validates it, and **stops for your review**. You confirm
+  the pattern - WBS, logic, durations - before it is replicated across every
+  unit, then approve the Replicate phase.
+- **`false`** - the builder runs straight through to the whole schedule in one
+  pass, with a single checkpoint at the end.
+
+Default to `true`. A wrong pattern caught on one unit is far cheaper to fix than
+the same error replicated across every unit in the schedule.

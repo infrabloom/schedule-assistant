@@ -41,11 +41,11 @@ list of operations).
 changeset:
   id: CS-007
   title: "Short human title"
-  base_xer: CB4-Draft-V6.xer        # the file this change-set is applied to
-  update_xer: CB4-Draft-V7.xer      # the updated XER to import into OPC (an update, not a replacement)
+  base_xer: DC1-Draft-V6.xer        # the file this change-set is applied to
+  update_xer: DC1-Draft-V7.xer      # the updated XER to import into OPC (an update, not a replacement)
   data_date: 2026-05-15
   prepared: 2026-05-21
-  author: "Scheduler (CB4)"
+  author: "Scheduler (DC1)"
   requested_by: "Patrick"           # optional — who asked for the change
   trigger: "What prompted this batch — meeting, weekly refresh, analysis."
   summary: "Plain-language description of the batch as a whole."
@@ -156,10 +156,10 @@ Accepts an explicit `relationships:` list or a bulk `match:` selector (see §2.1
   source: "..."
   activity:
     code: CONS-DH4-DH-2035
-    name: "DH4 - CDU Final Pipe Terminations (6\"-4\" Drop Transition) (MLP)"
+    name: "DH4 - CDU Final Pipe Terminations (6\"-4\" Drop Transition) (Mech Contractor)"
     wbs: "04 Construction > Area 4 > Mech Room 4"   # WBS by path
     type: Task                           # Task | Milestone
-    calendar: "CB4 Standard 7-Day No Holidays"
+    calendar: "Standard 7-Day No Holidays"
     duration_days: 5
     status: NotStarted                   # NotStarted | InProgress | Complete
     actual_start: null
@@ -168,7 +168,7 @@ Accepts an explicit `relationships:` list or a bulk `match:` selector (see §2.1
     constraint: null                     # or { type: MEOB, date: 2026-05-25 }
     codes:                               # optional — activity-code assignments (§2.8)
       Trade: Mechanical
-      Subcontractor: MLP
+      Subcontractor: MechContractor
   predecessors:
     - { activity: CONS-DH4-DH-2030, type: FS, lag_days: 0 }
   successors:
@@ -188,8 +188,8 @@ itself is supported via `code:` but is higher-risk — use sparingly.
   reason: "..."
   source: "..."
   activity: CONS-DH4-MR-M-FW-PIPE-E
-  set:     { name: "DH4 FW Piping East CRAH Gallery (all 12 units, MLP/JWD)" }
-  expect:  { name: "DH4 FW Piping East CRAH Gallery (all 15 units, MLP/JWD)" }
+  set:     { name: "DH4 FW Piping East CRAH Gallery (all 12 units, MechContractor/JWD)" }
+  expect:  { name: "DH4 FW Piping East CRAH Gallery (all 15 units, MechContractor/JWD)" }
 ```
 
 ### 2.6 `split_activity`
@@ -203,7 +203,7 @@ move to the new activity, add explicit `add_relationship` / `remove_relationship
 - id: C6
   op: split_activity
   reason: "Fan wall delivery splits 25 units into a batch of 20 and a final 5."
-  source: "CB4 schedule review 2026-05-19 (00:23:18)."
+  source: "Schedule review 2026-05-19 (00:23:18)."
   original: PROC-DH4-FCW
   expect:        { name: "DH4 - Fan Coil Walls (25)" }
   modify_original:                       # fields changed on the kept activity
@@ -216,7 +216,7 @@ move to the new activity, add explicit `add_relationship` / `remove_relationship
     duration_days: 45
     status: InProgress
     remain_duration_days: 24
-    codes: { Trade: Mechanical, Subcontractor: MLP }
+    codes: { Trade: Mechanical, Subcontractor: MechContractor }
     predecessors:
       - { activity: MS-PM-1000, type: FS, lag_days: 0 }
     successors: []
@@ -262,10 +262,10 @@ it is *not* the Activity ID. A value must be defined here before it can be assig
   code_type: Subcontractor
   scope: Project                         # Project (recommended) | Global
   values:
-    - { code: OCE,  description: "O'Connell Electric" }
-    - { code: MLP,  description: "MLP Corp - Mechanical" }
+    - { code: ELEC, description: "Electrical Contractor" }
+    - { code: MECH, description: "Mechanical Contractor" }
     - { code: FERG, description: "Ferguson Electric" }
-    - { code: DAF,  description: "DAF - Cooling Commissioning" }
+    - { code: CXCO, description: "Cooling-Commissioning Contractor" }
 ```
 
 ### 2.9 `assign_activity_code`
@@ -280,12 +280,12 @@ task_code (the patcher expands `match` and records the resolved list in the run 
   source: "..."
   code_type: Subcontractor
   assignments:
-    - { value: MLP,  activities: [CONS-DH4-MR-2023, CONS-DH4-MR-2024] }
-    - { value: OCE,  match: "CONS-DH*-MR-11*" }
+    - { value: MECH, activities: [CONS-DH4-MR-2023, CONS-DH4-MR-2024] }
+    - { value: ELEC, match: "CONS-DH*-MR-11*" }
 ```
 
 An activity may hold one value per code type and several code types at once
-(e.g. `Trade: Electrical` **and** `Subcontractor: OCE`).
+(e.g. `Trade: Electrical` **and** `Subcontractor: ELEC`).
 
 ### 2.10 `remove_activity_code`
 
@@ -391,8 +391,8 @@ Renames, renumbers, or reparents a WBS node. Identify the node by its current `p
 
 ## 5. Out of scope / noted (v1.3)
 
-The working CB4 files do not currently use these, so the schema does not yet cover them.
-Operations will be added when first needed:
+The working reference-project files do not currently use these, so the schema does not yet
+cover them. Operations will be added when first needed:
 
 - **Resource loading** — `RSRC` / `TASKRSRC` tables (no resources in the current schedule).
 - **User-defined fields** — `UDFTYPE` / `UDFVALUE`.
@@ -404,6 +404,7 @@ Noted but intentionally not given a dedicated operation:
 - **Replication** — copying a structure across the four Data Halls with an N-day stagger
   is a recurring pattern, but it is just bulk `add_activity`. A `replicate` convenience
   operation may be added later; it is not required.
-- **Per-activity source provenance** — which OCE/MLP leaf an activity came from is held in
-  the change-set audit trail (the `source` field on every `add_activity`), not embedded in
-  the XER. Embedding it in-schedule would require a UDF (see above).
+- **Per-activity source provenance** — which electrical or mechanical contractor leaf an
+  activity came from is held in the change-set audit trail (the `source` field on every
+  `add_activity`), not embedded in the XER. Embedding it in-schedule would require a UDF
+  (see above).

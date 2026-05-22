@@ -1,6 +1,6 @@
 # Acronyms & Terminology — DC Scheduling
 
-The acronyms you'll hit on any hyperscale data center scheduling project. Distilled from CB4 — most are industry-standard.
+The acronyms you'll hit on any hyperscale data center scheduling project. Distilled from the reference project — most are industry-standard.
 
 ---
 
@@ -99,9 +99,6 @@ The acronyms you'll hit on any hyperscale data center scheduling project. Distil
 | **SI** | Systems Integrator |
 | **AHJ** | Authority Having Jurisdiction (local inspector) |
 | **MEP** | Mechanical / Electrical / Plumbing |
-| **MLP** | Mech Lead Partner (CB4 mech install — project-specific name) |
-| **DAF** | (CB4 cooling commissioning trade — project-specific) |
-| **OCE** | (CB4 on-site electrical contractor — project-specific) |
 
 ---
 
@@ -194,9 +191,9 @@ The acronyms you'll hit on any hyperscale data center scheduling project. Distil
 
 ---
 
-## Common Vendors (CB4-specific — confirm on each project)
+## Common Vendors (project-specific — confirm on each project)
 
-| Vendor | Scope on CB4 |
+| Vendor | Scope on the reference project |
 |---|---|
 | Schneider Electric | CDUs, MV / LV switchgear (some) |
 | Vertiv | Alternate CDU vendor |
@@ -205,8 +202,8 @@ The acronyms you'll hit on any hyperscale data center scheduling project. Distil
 | Eaton | UPS / switchgear |
 | Trane / Carrier / York | Chillers |
 | Stulz | CRAH / CRAC (alternate) |
-| FluidStack | Owner (rack install + IT load) — CB4 specific |
-| Terawulf | Project sponsor / GC partner — CB4 specific |
+| The client | Owner-side IT party (rack install + IT load) — project-specific |
+| The owner | Project sponsor / GC partner — project-specific |
 
 ---
 
@@ -251,7 +248,7 @@ completion), different names. See `references/12-reference-template-library.md`.
 
 | Term | Used by | Meaning |
 |---|---|---|
-| **EFA / FA / FR / RFS** | TeraWulf (CB4) | Early First Access / Facility Access / Facility Ready / Ready For Service. |
+| **EFA / FA / FR / RFS** | the owner (reference project) | Early First Access / Facility Access / Facility Ready / Ready For Service. |
 | **FEA** | alt. owner pattern | Fiber Early Access. |
 | **NEA** | alt. owner pattern | Network Early Access. |
 | **H2C** | alt. owner pattern | Hand-to-Customer handover milestone (exact expansion not stated in source -- confirm with the owner). |

@@ -36,7 +36,7 @@ buffered at the earlier (cheaper-to-hold) stages. In order:
 $/W investment escalates rapidly from stage 4 onward.
 
 **Where this skill's schedules sit:** an owner-side construction schedule
-(CB4-style) typically covers **stages 3-7** -- shell, plant, data-hall fitout,
+(reference-project-style) typically covers **stages 3-7** -- shell, plant, data-hall fitout,
 cluster fitout. Stages 1-2 (land, utilities) and the substation long-lead are
 usually "by others", but they **must appear as predecessors / long-lead
 constraints** to the energization milestones (A-feed / B-feed). If the
@@ -88,9 +88,9 @@ hyperscale design is the **three-loop system**:
 1. **Air loop** -- air cooled by fan coils, heated by the servers, kept short
    (hot aisle captured, cooled air returned to the cold aisle).
 2. **Process / chilled water loop** -- warm water from the fan coils returns to
-   the plant, is chilled, pumps back. (CB4's CHW / PCW loops.)
+   the plant, is chilled, pumps back. (The reference project's CHW / PCW loops.)
 3. **Condenser water loop** -- carries heat from the process loop out to the
-   cooling towers for rejection. (CB4's CW loop.)
+   cooling towers for rejection. (The reference project's CW loop.)
 
 | Component | What it does |
 |---|---|
@@ -110,7 +110,7 @@ economically impractical above ~150-200 W/sq ft, because airflow demand scales
 linearly with rack power. So high-density (AI/HPC) halls require liquid cooling
 -- CDUs, cold plates, rear-door HX, per-rack chilled-water plumbing. **That
 plumbing is real schedule scope:** more pipe, more connections, leak management,
-and finer water distribution than the old building loop. CB4's CDUs and
+and finer water distribution than the old building loop. The reference project's CDUs and
 rear-door HX exist for exactly this reason.
 
 ## 4. Two facts that change how you size and sequence

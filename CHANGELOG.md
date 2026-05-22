@@ -10,26 +10,72 @@ docs, and the bundled `data-center-schedule` skill. Follows semantic versioning.
 > caused it. This file tracks the **tool**, not any one schedule.
 
 The bundled skill carries its own finer-grained version line in
-`skills/data-center-schedule/SKILL.md` (currently v1.14). The plugin version and
+`skills/data-center-schedule/SKILL.md` (currently v1.15). The plugin version and
 the skill version move independently; each plugin release bundles whatever skill
 version was current at the time.
 
 ---
 
-## 0.5.1 — 2026-05-22 — /start-project fixes from the first test run
+## 0.5.5 — 2026-05-22 — Staged build is a choice, and a real hard stop
+
+- New build-brief field **`first_unit_review`** (default `true`): build the first
+  repeating unit, pause for your review, then replicate — or set it `false` to
+  build the whole schedule in one pass. `/start-project`'s interview asks for it.
+- Fixed: `/build-schedule` built the entire schedule at once, blowing past the
+  first-unit checkpoint. When `first_unit_review` is true, that checkpoint is now
+  a hard STOP — build exactly one unit and wait for approval before replicating,
+  the same gate model as `/update-schedule`'s approval gate.
+
+## 0.5.4 — 2026-05-22 — /build-schedule writes into the project folder
+
+- Fixed: the first-unit XER (and other build outputs) could land in the
+  assistant's temporary scratch directory instead of the project's `outputs/`
+  folder, where the user couldn't find it. `/build-schedule` now states
+  explicitly that every file it produces — the builder script, every XER, every
+  deliverable — is written into the connected project folder (XERs in
+  `outputs/`), never a scratch location, and reports each file's full path at the
+  first-unit checkpoint.
+
+## 0.5.3 — 2026-05-22 — Full project-name sanitization
+
+- Genericized **every** reference to the project the plugin was built from —
+  ~294 occurrences across ~30 files (skill references, `SKILL.md`,
+  `MAINTENANCE.md`, docs, scripts, command files). Owner / client / site /
+  contractor / contract names and building codes are now generic: "the owner",
+  "the client", "the site", "the electrical contractor", "the mechanical
+  contractor", "the cooling-commissioning contractor", "the contract", "the
+  reference project".
+- The skill's lessons, patterns, durations, and guidance are unchanged — only
+  the names were swapped, so nothing ties the plugin to a specific job. The
+  bundled template XERs were already sanitized (skill v1.6).
+- Bundled skill → **v1.15**.
+
+## 0.5.2 — 2026-05-22 — Update-side on-ramp + generic prompts
+
+- **`/update-schedule` precondition.** On an empty or bare folder it now stops and
+  directs the user to `/start-project` (takeover path) instead of dead-ending —
+  setup (folders + `project.yaml`) stays a single job, `/start-project`.
+- **Takeover file placement.** `/start-project`'s takeover path now puts the
+  current schedule XER in `outputs/` (the base `/update-schedule` works from) and
+  new update info in `inbox/`; build sources still go in `inputs/`.
+- **Generic command prompts.** `/update-schedule` no longer names project-specific
+  contractors or documents — it cites "trade schedules", "the equipment list", and
+  "the contract document" generically.
+- **Update files via `inbox/`.** `/update-schedule`'s Intake step now explicitly
+  routes new files to the `inbox/` folder, not chat uploads.
+
+## 0.5.1 — 2026-05-22 — /start-project on-ramp fixes from the first test run
 
 - **Scaffold first.** `/start-project` now creates the project folder structure
   (`inputs/ outputs/ inbox/ changesets/` + seeded `CHANGELOG.md` /
   `lessons-log.md`) as its unmissable first action, before any interview — so the
-  build/update commands never find an empty folder.
-- **Input files go in the folder, not the chat.** The intake step moved up (right
-  after scaffolding) and now explicitly tells the user to copy files into
-  `inputs/` with their file manager — uploading large schedule files into the
-  conversation bloats it.
+  build and update commands never find an empty folder.
+- **Files go in the folder, not the chat.** The intake step moved up and tells the
+  user to copy files in with their file manager rather than uploading them.
 - **Generic milestone interview.** Dropped the preloaded `EFA / FA` examples; the
   interview asks the user for their own milestone codes without steering.
-- **`/build-schedule` precondition.** It now checks the project folder is set up
-  and tells the user to run `/start-project` first if not, instead of stumbling.
+- **`/build-schedule` precondition.** It checks the project folder is set up and
+  tells the user to run `/start-project` first if not, instead of stumbling.
 
 ## 0.5.0 — 2026-05-22 — New command: /start-project
 

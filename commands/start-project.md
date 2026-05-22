@@ -33,7 +33,7 @@ build and update commands expect the folder structure to already exist; creating
 it up front is what makes the rest of the workflow reliable.
 
 1. Confirm the **project folder** with the user. By default it is the folder this
-   Cowork project is connected to (e.g. `.../Schedules/CB5`). Confirm the path;
+   Cowork project is connected to (e.g. `.../Schedules/DC1`). Confirm the path;
    if the user names a different location, use that.
 2. Immediately create this structure inside the project folder (use the shell):
 
@@ -64,21 +64,25 @@ First, classify the project (one question):
 - **Takeover** - a schedule (an XER) already exists; the goal is to start
   maintaining it through `/update-schedule`.
 
-Then have the user **place the input files into the `inputs/` folder**:
+Then have the user place the project's files into the folder, using their
+**file manager** (File Explorer on Windows, Finder on Mac) - **not** by uploading
+them into the chat. The project folder is on disk and the assistant reads files
+straight from it; uploading large schedule files as chat attachments bloats the
+conversation and slows everything down. Where each file goes depends on the
+project type:
 
-> Ask the user to copy their input files into the project's `inputs/` folder
-> using their **file manager** (File Explorer on Windows, Finder on Mac) - **not**
-> by uploading them into the chat. The project folder is on disk and the
-> assistant reads the files straight from `inputs/`; uploading large schedule
-> files as chat attachments bloats the conversation and slows everything down.
+- **New build** - all source files go in **`inputs/`**: reference templates,
+  client / milestone documents, trade schedules, the equipment list (MEL).
+- **Takeover** - the current schedule XER goes in **`outputs/`** - it is the base
+  `/update-schedule` builds the first change-set against. Any new information to
+  fold into that first update (a refreshed trade schedule, meeting notes) goes in
+  **`inbox/`**.
 
-Wait for the user to confirm the files are in `inputs/`. Then read that folder,
-inventory what is there, and role-tag every file: `template`, `client-context`,
-`good-schedule`, `bad-schedule`, `trade-schedule`, or `mel` (the build-brief role
-tags - see `docs/build-brief-schema.md`).
-
-For a **takeover**, identify the **current base XER** explicitly - that is the
-file `/update-schedule` will treat as the starting point.
+Wait for the user to confirm the files are placed. Then read the folders,
+inventory what is there, and role-tag every build input (`template`,
+`client-context`, `good-schedule`, `bad-schedule`, `trade-schedule`, `mel` - see
+`docs/build-brief-schema.md`). For a **takeover**, confirm the **base XER** in
+`outputs/` - that is the file `/update-schedule` treats as the starting point.
 
 Note any gaps. A missing source is an open item to record, not a reason to stop.
 
@@ -108,6 +112,12 @@ Collect the following, asking one focused thing at a time:
    GC** - do not assume it.
 6. **New build only** - the target detail level (Level 1-5; see the skill's
    `references/09-schedule-levels.md`).
+7. **New build only** - the **build mode**: ask whether to build the first
+   repeating unit (one Data Hall / Phase) and **pause for review** before
+   replicating to the whole schedule, or build the whole schedule in one pass.
+   Default and recommendation: pause for review - a wrong pattern caught on one
+   unit is far cheaper than the same error replicated across every unit. Record
+   as `first_unit_review` (true / false) in the build-brief.
 
 Use the skill's `references/05-project-kickoff-checklist.md` as the backing
 checklist - it is the long-form version of this interview.

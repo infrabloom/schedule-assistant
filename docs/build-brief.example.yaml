@@ -3,15 +3,16 @@
 # Schema + field docs: docs/build-brief-schema.md
 
 project:
-  id:         CB5
-  name:       CB5 Hyperscale DC Build
-  owner:      TeraWulf
+  id:         DC1
+  name:       DC1 Hyperscale DC Build
+  owner:      <OWNER>
   gc:         TBD
   data_date:  2026-06-01
   calendar:   7d-8h                 # 7-day, 8 hours/day
 
 detail_level: 3                     # 1 milestone | 2 summary | 3 control CPM | 4 execution | 5 look-ahead
 mode:         full-input            # full-input | minimal-input
+first_unit_review: true             # true = build one unit, pause for your review, then replicate; false = build the whole schedule at once
 template:     VA2-DC                # closest bundled reference template
 
 units:

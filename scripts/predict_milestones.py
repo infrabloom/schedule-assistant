@@ -153,7 +153,7 @@ def load(path, data_date_override=None):
 # contract-milestone token, bounded by separators. A project with a different
 # milestone-naming convention overrides this via project.yaml's
 # `milestones.contract_pattern` - review_changeset.py forwards it as
-# --milestone-pattern (see docs/project-schema.md). NOT CB4-specific.
+# --milestone-pattern (see docs/project-schema.md). Not project-specific.
 DEFAULT_MILESTONE_PATTERN = r'(?:^|[-_.])(EFA|FA|FR|RFS|MEC|TCO|PCO)(?:[-_.]|$)'
 
 def contract_milestones(activities, pattern):

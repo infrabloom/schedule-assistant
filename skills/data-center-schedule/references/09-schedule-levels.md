@@ -40,11 +40,11 @@ When in doubt, write it out: "schedule Level 3", "commissioning L3", "WBS level 
 
 ### Level 3 -- Control / CPM Schedule  (the canonical layer)
 - **Purpose:** the working schedule -- sequences work across all subs and drives
-  the contractual milestones. This is what "the CB4 schedule" is.
+  the contractual milestones. This is what "the reference project schedule" is.
 - **Audience:** scheduler, GC, subcontractors.
 - **Granularity:** activity-level, full predecessor logic, procurement-to-install
   ties, L2-L5 commissioning activities, per-DH catalog.
-- **Size:** ~800-1500 activities for a 4-DH build (CB4 = ~1,130).
+- **Size:** ~800-1500 activities for a 4-DH build (the reference project = ~1,130).
 - **Includes:** the full per-DH activity catalog (`02-schedule-patterns.md`
   section 2) for every area, replicated with stagger.
 - **Inputs needed:** trade detailed schedules, MEL, P6 templates, milestone defs.

@@ -13,7 +13,7 @@ Use this checklist at the start of every new DC schedule project. Run through it
 - [ ] **Client high-level schedule** (XER, PDF, or P6 export) — for milestone reference
 - [ ] **Site plan / Keyplan** (PDF or DWG) — for zone-to-Area cross-reference
 - [ ] **Building / Architectural plans** (PDF) — for shell / room layouts
-- [ ] **Rack count + install rate** — owner's IT vendor cadence (e.g., FluidStack 4 weeks per DH)
+- [ ] **Rack count + install rate** — owner's IT vendor cadence (e.g., the client at 4 weeks per DH)
 
 ### From the GC
 
@@ -71,7 +71,7 @@ These are the **critical questions** that drive schedule logic. Get answers in w
 ### Trade Scope
 
 - [ ] **Who installs CDUs?** (Vendor — Schneider / Vertiv / other — NOT mech contractor usually)
-- [ ] **Who installs Fan Walls?** (Vendor — confirm — DAF procures but doesn't install on CB4)
+- [ ] **Who installs Fan Walls?** (Vendor — confirm — on the reference project the cooling-commissioning contractor procures but doesn't install)
 - [ ] **Who owns Flush & Fill?** (Cooling commissioning trade, NOT install contractor)
 - [ ] **Who installs racks?** (Owner / owner's IT vendor)
 - [ ] **Who is the CxA?** (Third-party — book early, they're often hidden critical path)
@@ -86,8 +86,8 @@ These are the **critical questions** that drive schedule logic. Get answers in w
 ### Durations
 
 - [ ] **Confirm trade-reported durations vs template defaults** (see Lessons #6)
-- [ ] **L3-MV-EN duration** — confirm with OCE / CxA
-- [ ] **L3-LV-EN duration** — confirm with OCE / CxA
+- [ ] **L3-MV-EN duration** — confirm with the electrical contractor / CxA
+- [ ] **L3-LV-EN duration** — confirm with the electrical contractor / CxA
 - [ ] **DH Branch Power install duration** — confirm with electrical contractor
 - [ ] **Rack install duration** — confirm with owner
 
@@ -108,11 +108,11 @@ Get name + email + role for each. Update throughout project.
 - [ ] **Owner's IT lead** (rack install + IT load schedule)
 - [ ] **GC PM** (this is your direct boss)
 - [ ] **GC PE / Field Lead** (real-time site status)
-- [ ] **Mech install lead** (PM at MLP)
-- [ ] **Mech commissioning lead** (PM at DAF — cooling)
-- [ ] **Electrical lead** (PM at OCE)
+- [ ] **Mech install lead** (PM at the mechanical contractor)
+- [ ] **Mech commissioning lead** (PM at the cooling-commissioning contractor)
+- [ ] **Electrical lead** (PM at the electrical contractor)
 - [ ] **CDU vendor PM** (Schneider / Vertiv contact)
-- [ ] **Fan Wall vendor PM** (TBD on CB4)
+- [ ] **Fan Wall vendor PM** (TBD on the reference project)
 - [ ] **UPS vendor PM**
 - [ ] **Generator vendor PM**
 - [ ] **MV / LV switchgear vendor PM**
@@ -189,7 +189,7 @@ If you don't have everything, **flag the gaps explicitly** and proceed with what
 
 Trigger heightened scrutiny if any of these are true:
 
-- 🟥 **Prior GC schedule has known bad logic** (per CB4 — duplicates, broken ties) → Do NOT carry forward logic
+- 🟥 **Prior GC schedule has known bad logic** (as on the reference project — duplicates, broken ties) → Do NOT carry forward logic
 - 🟥 **Trade durations are 3-10× template defaults** → Investigate, don't auto-pick (see Lessons #6)
 - 🟥 **CxA not yet engaged** → Critical path hidden until they're booked
 - 🟥 **Equipment with > 20 week lead time not yet ordered** → Surface as a procurement chase-list item

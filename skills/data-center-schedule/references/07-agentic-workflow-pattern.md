@@ -1,6 +1,6 @@
 # Agentic Workflow Pattern — 11 Agents for a DC Schedule Pipeline
 
-This reference is for users who want to **operationalize the data-center-schedule workflow as a multi-agent system in Claude Code** (or any agent framework). It captures the 11 personas derived from the CB4 build and the data flow between them.
+This reference is for users who want to **operationalize the data-center-schedule workflow as a multi-agent system in Claude Code** (or any agent framework). It captures the 11 personas derived from the reference-project build and the data flow between them.
 
 Use this **only** if standing up an agent system. For one-off Cowork conversations, the phased workflow in `01-phased-workflow.md` is sufficient.
 
@@ -12,8 +12,8 @@ Use this **only** if standing up an agent system. For one-off Cowork conversatio
 |---|---|
 | One-off audit or fix | Single Cowork conversation, phased workflow |
 | Building a new schedule end-to-end with checkpoints | Single Cowork conversation, phased workflow |
-| Weekly refresh that runs on a schedule | Multi-agent (Orchestrator + OCE Refresh + MLP Refresh + Validator + Change Log) |
-| Multiple parallel TeraWulf projects sharing the pattern | Multi-agent with a Catalog Builder per project |
+| Weekly refresh that runs on a schedule | Multi-agent (Orchestrator + Electrical Refresh + Mechanical Refresh + Validator + Change Log) |
+| Multiple parallel owner projects sharing the pattern | Multi-agent with a Catalog Builder per project |
 | Want deterministic re-runs of the whole pipeline | Multi-agent with explicit state files between agents |
 
 ---
@@ -27,14 +27,14 @@ Use this **only** if standing up an agent system. For one-off Cowork conversatio
 - Read each input and produce a structured extraction memo
 - Flag conflicts with higher-authority sources
 - Apply the source-of-truth hierarchy (see SKILL.md)
-- Apply OCE/3 calendar conversion when reading OCE XMLs
+- Apply the electrical-contractor /3 calendar conversion when reading the electrical contractor's XMLs
 **Key methods:**
 - `extract_xer(path)` -> dict of TASK/TASKPRED/PROJWBS/PROJECT/CALENDAR
-- `extract_msproject_xml(path, oce_or_mlp)` -> activities + durations + actuals + logic
+- `extract_msproject_xml(path, electrical_or_mechanical)` -> activities + durations + actuals + logic
 - `extract_mel_csv(path)` -> per-equipment rows with PO/delivery/received dates
 - `extract_pdf(path, pages)` -> contractual definitions
 **Guardrails:**
-- Never copy OCE planned start/finish — derive from %/duration/actuals/logic position
+- Never copy the electrical contractor's planned start/finish — derive from %/duration/actuals/logic position
 - Never trust prior-GC schedule logic — actuals only
 - Cite source file + row/page on every extracted fact
 
@@ -42,14 +42,14 @@ Use this **only** if standing up an agent system. For one-off Cowork conversatio
 **Inputs:** all extraction notes; the locked WBS from the prior draft XER
 **Outputs:**
 - `activity-catalog.json` — every aggregate v3 task with: code, name, WBS, duration, calendar, status, %, predecessors
-- `oce-mlp-crosswalk.xlsx` — OCE/MLP leaf -> v3 aggregate mapping (one-time investment)
+- `electrical-mechanical-crosswalk.xlsx` — electrical/mechanical contractor leaf -> v3 aggregate mapping (one-time investment)
 **Responsibilities:**
 - Define the per-DH activity catalog (DH4 first, then replicate)
 - Build the crosswalk catalog so weekly refreshes become mechanical
 - Resolve many-to-one aggregation rules per task family
-- Capture parent-section context to disambiguate name collisions (e.g., OCE has "Install Cable Tray" 16x; each lives under a different parent section)
+- Capture parent-section context to disambiguate name collisions (e.g., the electrical contractor has "Install Cable Tray" 16x; each lives under a different parent section)
 **Guardrails:**
-- Never auto-match OCE -> v3 names blindly; CB4 attempt produced <5% high-confidence rate and several false positives (e.g., 83 UPS-corridor activities mis-mapped to ADMIN-MEP)
+- Never auto-match the electrical contractor -> v3 names blindly; the reference-project attempt produced <5% high-confidence rate and several false positives (e.g., 83 UPS-corridor activities mis-mapped to ADMIN-MEP)
 - Build the crosswalk row-by-row with explicit parent-section paths
 - Document aggregation rule per row (earliest AS / latest AF / weighted % / etc.)
 
@@ -83,23 +83,23 @@ Use this **only** if standing up an agent system. For one-off Cowork conversatio
 - Never suppress a failed check; fix the underlying issue
 - Re-run after every retie operation (cycles love to appear)
 
-### 5. OCE Refresh Agent
-**Inputs:** latest OCE XML files, crosswalk catalog, current v3 XER
-**Outputs:** updated XER + `OCE-refresh-changelog-{date}.md`
+### 5. Electrical Refresh Agent
+**Inputs:** latest electrical-contractor XML files, crosswalk catalog, current v3 XER
+**Outputs:** updated XER + `electrical-refresh-changelog-{date}.md`
 **Responsibilities:**
-- Diff this week's OCE XML vs last week's (new activities, changed durations, new actuals, new logic)
-- For each crosswalk row, pull current AS/AF/%/RD from all listed OCE leaves and aggregate (earliest AS, latest AF if all done, weighted % otherwise)
-- Apply OCE/3 conversion to all durations
-- Flag any case where derived dates differ from OCE's stated dates by >1 shift (OCE planned dates are unreliable)
+- Diff this week's electrical-contractor XML vs last week's (new activities, changed durations, new actuals, new logic)
+- For each crosswalk row, pull current AS/AF/%/RD from all listed electrical-contractor leaves and aggregate (earliest AS, latest AF if all done, weighted % otherwise)
+- Apply the /3 conversion to all durations
+- Flag any case where derived dates differ from the electrical contractor's stated dates by >1 shift (the electrical contractor's planned dates are unreliable)
 **Guardrails:**
 - Only apply mappings present in the crosswalk catalog — never auto-match
-- If a new OCE activity has no crosswalk entry, log it and surface to user
+- If a new electrical-contractor activity has no crosswalk entry, log it and surface to user
 - Conservative on actuals: only mark progress with documentary evidence
 
-### 6. MLP Refresh Agent
-**Inputs:** latest MLP XML, crosswalk, current XER
-**Outputs:** updated XER + `MLP-refresh-changelog-{date}.md`
-**Responsibilities:** same as OCE Refresh but for mechanical scope; no /3 conversion needed (MLP is already 8h/day)
+### 6. Mechanical Refresh Agent
+**Inputs:** latest mechanical-contractor XML, crosswalk, current XER
+**Outputs:** updated XER + `mechanical-refresh-changelog-{date}.md`
+**Responsibilities:** same as the Electrical Refresh agent but for mechanical scope; no /3 conversion needed (the mechanical contractor is already 8h/day)
 
 ### 7. MEL Reconciliation Agent
 **Inputs:** latest MEL CSV, current XER's procurement WBS
@@ -134,7 +134,7 @@ Use this **only** if standing up an agent system. For one-off Cowork conversatio
 - Generate per-milestone narrative ("DH4 EFA critical path: ... 23 activities, longest chain X weeks")
 - Identify the binding constraint (procurement? commissioning? construction?)
 **Guardrails:**
-- Use derived dates, not OCE planned dates
+- Use derived dates, not the electrical contractor's planned dates
 - Surface near-critical paths too (float <=5 days)
 
 ### 10. Change Log Generator
@@ -143,7 +143,7 @@ Use this **only** if standing up an agent system. For one-off Cowork conversatio
 **Responsibilities:**
 - Diff task counts, tie counts, milestone dates
 - List every retired task, every new task, every duration change, every status change
-- Categorize by source: OCE refresh / MLP refresh / MEL recon / logic fix / manual
+- Categorize by source: electrical refresh / mechanical refresh / MEL recon / logic fix / manual
 **Guardrails:**
 - One change log per material version bump. Never overwrite delivered XER.
 
@@ -151,9 +151,9 @@ Use this **only** if standing up an agent system. For one-off Cowork conversatio
 **Inputs:** trigger (manual or scheduled — e.g., weekly Monday 6am)
 **Outputs:** complete refresh delta + emails / Slack to PM
 **Responsibilities:**
-- Sequence the agents: Source Extractor -> Catalog Builder (one-time) -> [OCE Refresh || MLP Refresh || MEL Recon] -> XER Builder -> Validator -> Logic Auditor -> Critical Path Analyzer -> Change Log
+- Sequence the agents: Source Extractor -> Catalog Builder (one-time) -> [Electrical Refresh || Mechanical Refresh || MEL Recon] -> XER Builder -> Validator -> Logic Auditor -> Critical Path Analyzer -> Change Log
 - Handle failures: if Validator fails, hold the XER; surface failure to user
-- Maintain agent state files (last-run timestamps, last-applied OCE version, etc.)
+- Maintain agent state files (last-run timestamps, last-applied electrical-contractor version, etc.)
 - Drive checkpoint approvals (Phase 3, 4, 5 checkpoints) by pausing for user input
 **Guardrails:**
 - Never skip the Validator
@@ -178,7 +178,7 @@ outputs/extracts/*.md
         |
         v
 outputs/activity-catalog.json
-outputs/oce-mlp-crosswalk.xlsx
+outputs/electrical-mechanical-crosswalk.xlsx
         |
         v
 [XER Builder]
@@ -194,9 +194,9 @@ outputs/[Project]-Schedule-v{N}.xer
         +--(pass)--> deliver
         
 Weekly refresh:
-inputs/oce-week-N/*.xml  -->  [OCE Refresh]   -+
-inputs/mlp-week-N/*.xml  -->  [MLP Refresh]   -+--> updated catalog deltas
-inputs/mel-week-N.csv    -->  [MEL Recon]     -+
+inputs/electrical-week-N/*.xml  -->  [Electrical Refresh]   -+
+inputs/mechanical-week-N/*.xml  -->  [Mechanical Refresh]   -+--> updated catalog deltas
+inputs/mel-week-N.csv           -->  [MEL Recon]            -+
                                                 |
                                                 v
                                           [XER Builder]
@@ -228,8 +228,8 @@ inputs/mel-week-N.csv    -->  [MEL Recon]     -+
     catalog-builder.md
     xer-builder.md
     validator.md
-    oce-refresh.md
-    mlp-refresh.md
+    electrical-refresh.md
+    mechanical-refresh.md
     mel-recon.md
     logic-auditor.md
     critical-path-analyzer.md
@@ -242,8 +242,8 @@ inputs/mel-week-N.csv    -->  [MEL Recon]     -+
     build_xer.py
     validate_xer.py
     duplicate_audit.py
-    oce_xml_reader.py      <-- with /3 conversion
-    mlp_xml_reader.py
+    electrical_xml_reader.py   <-- with /3 conversion
+    mechanical_xml_reader.py
     mel_csv_reader.py
     crosswalk_apply.py
   data/
@@ -302,7 +302,7 @@ Recommended order to scaffold:
 2. **XER Builder** — once Validator works, you can iterate on the Builder confidently.
 3. **Source Extractor** — needs the input format known; build one file type at a time (start with XER, then MS-Project XML, then MEL CSV, then PDF).
 4. **Catalog Builder** — the one-time investment for crosswalk.
-5. **OCE Refresh + MLP Refresh + MEL Recon** in parallel — they share patterns.
+5. **Electrical Refresh + Mechanical Refresh + MEL Recon** in parallel — they share patterns.
 6. **Logic Auditor + Critical Path Analyzer** — both read-only; build last.
 7. **Change Log Generator** — needs prev/new XER side-by-side; build after refresh agents.
 8. **Orchestrator** — wires it all together.
@@ -315,7 +315,7 @@ Recommended order to scaffold:
 
 2. **Don't skip the Catalog Builder.** Without an explicit crosswalk, weekly refreshes will produce bad auto-matches that erode trust.
 
-3. **Don't run OCE Refresh without /3 conversion.** Every OCE duration must be divided by 3. The Refresh agent must enforce this.
+3. **Don't run the Electrical Refresh without /3 conversion.** Every electrical-contractor duration must be divided by 3. The Refresh agent must enforce this.
 
 4. **Don't write `CS_MEO` or `CS_MSO`** — only the A/B variants. Validator catches this but Builder should refuse upfront.
 
@@ -327,7 +327,7 @@ Recommended order to scaffold:
 
 8. **Don't tie procurement directly to EFA when L2 PFC is already a pred.** L2 PFC already requires procurement complete; the direct tie is redundant noise.
 
-9. **Don't use cross-DH FS chains for crew flow.** Use date-offset stagger instead. CB4 had 285 such chains in v3.0 that all needed to come out.
+9. **Don't use cross-DH FS chains for crew flow.** Use date-offset stagger instead. The reference project had 285 such chains in v3.0 that all needed to come out.
 
 10. **Don't run the Orchestrator without user approval at Phase 3, 4, 5 checkpoints.** These exist to catch logic errors before they cascade.
 

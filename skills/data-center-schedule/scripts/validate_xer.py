@@ -6,7 +6,7 @@ ONE consolidated validator for the data-center-schedule skill. It merges the
 logic-integrity checks (orphans, cycles, forward-chain-to-milestone, aref/arls)
 with the OPC-schema checks (case-insensitive code collisions, duration_type,
 midnight timestamps, proj_id) so a single run catches every failure mode found
-during the CB4 schedule rebuild.
+during a real data-center schedule rebuild.
 
 This file REPLACES the former validate_xer.py + validate_xer_v2.py pair. Those
 two did not compose into a complete gate -- v2 added the schema checks but
@@ -249,7 +249,7 @@ def main():
     else:
         okl(6, f"{len(codes)} task_codes unique (exact match)")
 
-    # --- 7. case-insensitive duplicate codes (the CB4 389-drop bug) ----------
+    # --- 7. case-insensitive duplicate codes (the 389-activity-drop bug) -----
     ci = collections.Counter(c.lower() for c in codes if c)
     ci_dups = [k for k, n in ci.items() if n > 1]
     if ci_dups:

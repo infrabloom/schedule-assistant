@@ -23,8 +23,8 @@ Each phase has a checkpoint; see `01-phased-workflow.md` for detail.
 - [ ] `cohesion_audit.py` exits 0 -- no orphans, every chain reaches a milestone.
 - [ ] `duplicate_audit.py` shows no hard (code) duplicates.
 - [ ] Every WARN from `validate_xer.py` is reviewed and accepted or fixed.
-- [ ] Every activity traces to a source (trade schedule, MEL, LMDC, locked
-      draft, or a documented first-principles assumption).
+- [ ] Every activity traces to a source (trade schedule, MEL, the contract
+      milestone schedule, locked draft, or a documented first-principles assumption).
 - [ ] Every procurement activity ties to a construction or commissioning
       successor (or a milestone, only where the contract requires it directly).
 - [ ] Each contractual milestone's predecessor pattern is consistent across all
@@ -46,7 +46,7 @@ Each phase has a checkpoint; see `01-phased-workflow.md` for detail.
 
 ## Weekly refresh complete
 
-- [ ] Trade files (OCE / MLP) diffed against last week's version.
+- [ ] Trade files (the electrical and mechanical contractors) diffed against last week's version.
 - [ ] Actuals transferred; durations/logic updated only where the trade changed
       their source of truth, with deviations flagged.
 - [ ] `validate_xer.py` and `cohesion_audit.py` both pass; no new orphans.

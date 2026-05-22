@@ -48,11 +48,11 @@ laptop, signed into the **same account**. The steps below are identical for both
 **Folder layout.** One synced root holds every project as a sibling folder:
 
 ```
-CB-Schedules/                 (the synced root)
-  CB4/
+DC-Schedules/                 (the synced root)
+  DC1/
     inputs/  outputs/  inbox/  changesets/
     build-brief.yaml  project.yaml  CHANGELOG.md  lessons-log.md
-  CB5/
+  DC2/
     ...
 ```
 
@@ -112,7 +112,7 @@ already protect the audit trail; these rules protect the files themselves.
 - [ ] One cloud service chosen (OneDrive or Google Drive), same account on each laptop
 - [ ] Sync client installed and signed in on each laptop
 - [ ] Project root set to "always keep on this device" / available offline
-- [ ] `CB-Schedules/CB4/` folder structure created; project data migrated in
+- [ ] `DC-Schedules/DC1/` folder structure created; project data migrated in
 - [ ] Plugin cloned into a non-synced `repos/` folder on each laptop
 - [ ] Plugin installed from git on each laptop (it carries the skill)
 - [ ] Python 3.9+, Git, and PyYAML present on each laptop

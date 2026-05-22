@@ -5,7 +5,7 @@ description: Build a new P6 / OPC schedule from scratch - intake inputs, draft a
 # Build Schedule
 
 Create a new data center schedule from the ground up. Use this when starting a
-new building (CB5, a new campus, ...) - as opposed to `/update-schedule`, which
+new building (a new campus, a follow-on building, ...) - as opposed to `/update-schedule`, which
 maintains an existing one. The build is driven by a **build-brief** and follows
 the bundled `data-center-schedule` skill's phased method, stopping at every
 CHECKPOINT for explicit approval.
@@ -24,6 +24,15 @@ Before starting, read the skill: `SKILL.md`, then `references/01-phased-workflow
 > the `inputs/`, `outputs/`, and `changesets/` structure. If it does not, the
 > project has not been set up - **stop and tell the user to run `/start-project`
 > first.** `/build-schedule` does not scaffold the folder; it expects it to exist.
+
+> **Where files go.** The project folder is the folder this Cowork project is
+> connected to - refer to it by its absolute path. **Every file this command
+> produces - the builder script, every schedule XER, every deliverable - is
+> written inside that project folder** (XERs and the builder script go in its
+> `outputs/` subfolder). **Never write a schedule file to a temporary, scratch,
+> or session working directory** - the user must be able to open these files on
+> their own drive. At every checkpoint that produces a file, state the file's
+> full absolute path.
 
 > **Phase numbering.** The phases below are scoped to the **build workflow** only.
 > They are not the same phases as `/update-schedule`, `/harvest-lessons`, or the
@@ -57,8 +66,10 @@ duration and tie flagged for trade confirmation. Never present a minimal-input
 build as if it were sourced.
 
 Then set the **target schedule level (Level 1-5)** per `references/09-schedule-levels.md`
-- L1 milestone, L2 summary, L3 control CPM, L4 execution, L5 look-ahead - and
-confirm the repeating-unit count + stagger.
+- L1 milestone, L2 summary, L3 control CPM, L4 execution, L5 look-ahead -
+confirm the repeating-unit count + stagger, and set the **build mode**
+(`first_unit_review`: build the first unit and pause for your review - the default
+and recommendation - or build the whole schedule at once).
 
 Write `build-brief.yaml`. **CHECKPOINT - present the brief before extraction.**
 
@@ -89,11 +100,29 @@ WBS or tie decision. Non-blocking - see `docs/lessons-pipeline.md`.
 
 ## Build the first unit · build phase 3
 
-Copy `skills/.../scripts/build_xer_starter.py` to `outputs/build_xer_v1.py`.
+Copy `${CLAUDE_PLUGIN_ROOT}/skills/data-center-schedule/scripts/build_xer_starter.py`
+into the **project's `outputs/` folder** as `build_xer_v1.py` - i.e. to the full
+path `<project folder>/outputs/build_xer_v1.py`. The builder writes its XER next
+to itself, so the schedule lands in the project's `outputs/` folder; after it
+runs, confirm the XER is actually there.
+
 Build ONE repeating unit (the first Data Hall / Phase) fully - clone a real
 template TASK row as the schema baseline (lesson #38; never assemble rows from
-scratch). Run `validate_xer.py`; fix every FAIL.
-**CHECKPOINT - present the first unit + validation result.**
+scratch). Run `validate_xer.py` on the XER; fix every FAIL.
+
+**How this phase ends depends on `first_unit_review` in the build-brief:**
+- **`first_unit_review: true` (the default) - HARD STOP.** Build ONLY the first
+  unit. Do **not** build, replicate, or even begin any other unit. Present the
+  first unit, the validation result, and the full XER path, and **wait for the
+  user's explicit approval** before the Replicate phase. This is a hard gate, like
+  the `/update-schedule` approval gate - building the rest before approval defeats
+  the entire purpose of building one unit first.
+- **`first_unit_review: false` - no stop.** The first unit is just the pattern;
+  continue straight into Replicate. There is still one checkpoint at the end
+  (QA & deliverables).
+
+**CHECKPOINT (when `first_unit_review: true`) - present the first unit + validation
+result + the full XER path in the project's `outputs/` folder, and STOP for approval.**
 
 **[CAPTURE]** - append lesson candidates from the first-unit build to `lessons-log.md`:
 an OPC import gotcha hit and fixed, a validator failure and its cause, a
@@ -101,17 +130,19 @@ template-default duration that proved wrong, a logic tie that had to be reworked
 
 ## Replicate · build phase 4
 
-Scale the first unit to all units with the brief's confirmed stagger - as date
-offsets, NOT cross-unit predecessor chains (lesson #26). Apply actuals where a
-source provides them. Add cross-area ties only where physically real.
+On approval of the first unit (or directly, if `first_unit_review: false`), scale
+the first unit to all units with the brief's confirmed stagger - as date offsets,
+NOT cross-unit predecessor chains (lesson #26). Apply actuals where a source
+provides them. Add cross-area ties only where physically real.
 
 ## QA & deliverables · build phase 5
 
 Hand the built XER to the **build-auditor** subagent: it runs `validate_xer.py`,
 `cohesion_audit.py`, and `duplicate_audit.py` and reports. Fix every FAIL; review
-every WARN. Then produce the deliverables per the skill: schedule narrative,
-assumptions register, open-items list, critical-path trace per milestone, PM
-briefing. Confirm the build-complete checklist in `references/10-acceptance-criteria.md`.
+every WARN. Then produce the deliverables per the skill, **written into the
+project folder**: schedule narrative, assumptions register, open-items list,
+critical-path trace per milestone, PM briefing. Confirm the build-complete
+checklist in `references/10-acceptance-criteria.md`.
 
 **Build retrospective** - before closing the build, consolidate lesson candidates into
 `lessons-log.md`: walk the assumptions register (every assumption that closed out is a
@@ -123,10 +154,14 @@ lessons; do not skip it. See `docs/lessons-pipeline.md`.
 
 ## Rules
 - Stop at every CHECKPOINT; do not proceed without explicit approval.
+- When `first_unit_review` is true, the first-unit checkpoint is a hard STOP -
+  build exactly one unit and wait; never replicate before the user approves.
 - Cite a source for every duration and logic tie; never fabricate. A
   minimal-input build flags every pattern-derived value in the assumptions register.
 - Clone a template row; never hand-assemble XER rows from scratch (lesson #38).
 - Validate before every checkpoint and before delivery.
+- Every file produced - the builder script, every XER, every deliverable - is
+  written into the project folder, never a temporary or scratch directory.
 - Increment the version on every material change; never overwrite a delivered XER.
 - Use only OPC-safe constraint codes: CS_MEOA / CS_MEOB / CS_MSOA.
 - Capture lessons as you go - `[CAPTURE]` at the Logic & assumptions and Build-the-

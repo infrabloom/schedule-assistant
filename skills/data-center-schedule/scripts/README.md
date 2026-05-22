@@ -9,11 +9,11 @@ for the core tools (Python 3.9+, standard library only).
 | File | Purpose |
 |---|---|
 | `build_xer_starter.py` | Skeleton builder. Defines `T()` (task), `P()` (predecessor), `TASK_CONSTRAINTS` (milestones), the WBS hierarchy and calendars. Copy to a project's `outputs/`, rename to `build_xer_v1.py`, edit, run to generate `[Project]-Schedule-v1.xer`. |
-| `validate_xer.py` | **The single comprehensive validator.** 21 FAIL checks + 7 WARN checks covering every OPC-import and logic-integrity failure mode found on CB4. Run before any XER is considered done. Exits non-zero on any failure. |
+| `validate_xer.py` | **The single comprehensive validator.** 21 FAIL checks + 7 WARN checks covering every OPC-import and logic-integrity failure mode found on the reference project. Run before any XER is considered done. Exits non-zero on any failure. |
 | `cohesion_audit.py` | Detailed pre-delivery cohesion report -- lists every orphan and dead-end chain grouped by WBS (validate_xer caps its output; this one is exhaustive). Mandatory before delivery. |
 | `duplicate_audit.py` | Scans an XER for duplicate activities by code, name keyword, and WBS scope. Run before merging any legacy schedule. |
 | `parse_xer.py` | XER reader. Loads any XER into Python dicts for analysis. |
-| `parse_msp.py` | Microsoft Project XML reader (OCE / MLP trade schedules). Direct-child-only field extraction, ISO-8601 duration parsing, calendar parsing, CB4-style activity-code extraction. |
+| `parse_msp.py` | Microsoft Project XML reader (electrical / mechanical contractor trade schedules). Direct-child-only field extraction, ISO-8601 duration parsing, calendar parsing, reference-project-style activity-code extraction. |
 | `analyze_msp.py` | Empirically derives the TRUE duration basis of an MSP file from its completed activities -- so the calendar conversion factor is measured, not guessed. |
 | `crosscheck_msp.py` | Cross-checks MSP `Duration` vs planned dates vs %complete, and computes the conversion to an 8h/day work-hour basis. |
 | `sanitize_xer.py` | Strips a real project XER into a reusable, client-safe template (see `MAINTENANCE.md`). |

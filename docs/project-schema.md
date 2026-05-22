@@ -1,6 +1,6 @@
 # Project Config Schema - project.yaml
 
-One `project.yaml` per project (CB4, CB5, ...), in the project folder root. It is
+One `project.yaml` per project (DC1, DC2, ...), in the project folder root. It is
 the file that carries project-specific settings - **the plugin code and the
 bundled skill never change per project.** `build-brief.yaml` drives a *new build*;
 `project.yaml` configures *updates* and the conventions a pipeline run uses.
@@ -9,10 +9,10 @@ bundled skill never change per project.** `build-brief.yaml` drives a *new build
 
 ```yaml
 project:
-  name:        CB4                              # human label
-  project_id:  CB4-Draft-V4                     # the OPC Project ID carried in
+  name:        DC1                              # human label
+  project_id:  DC1-Draft-V4                     # the OPC Project ID carried in
                                                 # every XER - do not change it
-  calendar:    "CB4 Standard 7-Day No Holidays" # the schedule's working calendar
+  calendar:    "DC1 Standard 7-Day No Holidays" # the schedule's working calendar
 
 paths:                                          # all relative to the project folder
   inbox:       inbox/                           # drop new input files here
@@ -57,7 +57,7 @@ There are two consumers: the **pipeline scripts** (Python) and the **assistant**
 plugin run on a different client **with no code change**.
 
 `predict_milestones.py` (the milestone CPM pre-check) must know which task codes
-are contract milestones. It no longer hardcodes a CB4-specific regex. Instead:
+are contract milestones. It no longer hardcodes a project-specific regex. Instead:
 
 1. If `review_changeset.py` finds a `project.yaml` with `milestones.contract_pattern`,
    it forwards that exact pattern - the project gets precise milestone detection.

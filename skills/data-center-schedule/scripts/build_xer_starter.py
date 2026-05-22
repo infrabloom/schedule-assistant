@@ -4,7 +4,8 @@ build_xer_starter.py — XER generator skeleton for a new DC schedule project.
 >>> SKELETON / TEST USE ONLY <<<
 This script WRITES XER ROWS FROM SCRATCH. That is fine for a minimal viable
 test XER, but a PRODUCTION build must NOT do this -- OPC silently drops
-from-scratch rows (CB4 lost 389 activities that way). For a real build, clone
+from-scratch rows (a real project lost 389 activities that way). For a real
+build, clone
 a real TASK row from a known-good template XER as the schema baseline and
 overwrite only the fields you control. See references/06-lessons-learned.md
 lesson #38, and references/10-acceptance-criteria.md.
@@ -35,8 +36,8 @@ from typing import Optional
 # PROJECT METADATA — edit these for your project
 # ============================================================
 
-PROJECT_CODE = "CB5"  # 2-4 chars, used in filenames
-PROJECT_NAME = "CB5 Hyperscale DC Build"
+PROJECT_CODE = "DC1"  # 2-4 chars, used in filenames
+PROJECT_NAME = "Hyperscale DC Build"
 DATA_DATE = dt.datetime(2026, 5, 8, 17)  # snapshot of project state
 CALENDAR_ID = "CAL-5DAY"
 PROJ_ID = 1  # internal P6 project ID — keep at 1 unless multi-project XER
@@ -199,11 +200,10 @@ def write_xer(path: Path):
 
     NOTE: This is a SKELETON — a real XER has 18 tables (CURRTYPE, FINDATES,
     PCATTYPE, PCATVAL, OBS, ROLES, USERS, ACCOUNTS, ROLERATE, RSRC, etc.).
-    For a full implementation, see the CB4 build_xer_v4_15.py reference script
-    or use a template XER as the structural baseline and only re-emit
-    TASK, TASKPRED, PROJWBS, PROJECT, CALENDAR rows.
+    For a full implementation, use a template XER as the structural baseline
+    and only re-emit TASK, TASKPRED, PROJWBS, PROJECT, CALENDAR rows.
 
-    The CB4 approach: load a template XER, replace PROJECT/PROJWBS/TASK/TASKPRED
+    The proven approach: load a template XER, replace PROJECT/PROJWBS/TASK/TASKPRED
     sections, keep everything else from the template.
     """
     lines = []

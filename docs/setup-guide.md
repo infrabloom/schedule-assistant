@@ -9,11 +9,11 @@ Two parts, kept separate on purpose:
   `/update-schedule`, and `/harvest-lessons` commands, the subagents, the
   change-set pipeline scripts, the schemas, and the bundled
   `data-center-schedule` domain skill (references, P6 templates, validators).
-- **The project - your project folder (e.g. `New CB4/`)** - just data. One per
+- **The project - your project folder (e.g. `New DC1/`)** - just data. One per
   building. Holds `inputs/`, `outputs/`, `inbox/`, `changesets/`,
   `build-brief.yaml`, `project.yaml`, and `CHANGELOG.md`.
 
-The plugin acts on the project. To run a second building (CB5), install the same
+The plugin acts on the project. To run a second building, install the same
 plugin and create a second project folder with its own brief and config.
 
 ## 2. Two ways to run it
@@ -56,7 +56,7 @@ build or update:
 
 ## 4. Starting a NEW schedule - `/build-schedule`
 
-For a new building (CB5, a new campus):
+For a new building or a new campus:
 
 1. **In chat: `/start-project`.** It scaffolds the project folder, interviews you
    for identity, contractual milestones, and source hierarchy, takes in your

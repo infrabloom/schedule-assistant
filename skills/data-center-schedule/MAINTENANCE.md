@@ -54,10 +54,10 @@ python scripts/sanitize_xer.py [Project]-Schedule-v4.X.xer /tmp/out.xer \
     --print-default-config > /tmp/scrub-config.json
 
 # Edit /tmp/scrub-config.json — fill in real names to scrub
-# (e.g., for CB4: replace "CB4" → "DC-TMPL", "Terawulf" → "OWNER",
-#  "FluidStack" → "CLIENT", "MLP" → "MECH-INSTALL",
-#  "DAF" → "MECH-CX", "OCE" → "ELEC-CONTRACTOR",
-#  "Lake Mariner" → "SITE-LOC", etc.)
+# (e.g., replace the project code → "DC-TMPL", the owner name → "OWNER",
+#  the client name → "CLIENT", the mechanical contractor → "MECH-INSTALL",
+#  the cooling-commissioning contractor → "MECH-CX", the electrical contractor → "ELEC-CONTRACTOR",
+#  the site name → "SITE-LOC", etc.)
 
 # Then run the sanitizer
 python scripts/sanitize_xer.py [Project]-Schedule-v4.X.xer \
@@ -81,8 +81,8 @@ After sanitization, **always**:
 ### Naming convention for reference XERs
 
 Use `[Project]-[Region]-[Year]-Template.xer`. Examples:
-- `CB4-NY-2026-Template.xer`
-- `CB5-TX-2027-Template.xer`
+- `DC1-NY-2026-Template.xer`
+- `DC2-TX-2027-Template.xer`
 - `DC8-VA-2027-Template.xer`
 
 This makes it easy at Phase 1 to pick the closest reference for a new project (geography + scale + year).
@@ -125,8 +125,8 @@ Add a changelog entry at the top of `SKILL.md` (right after the frontmatter):
 
 ```markdown
 <!-- Changelog
-v1.0 (2026-05): Initial release from CB4 build
-v1.1 (2026-XX): Added CB4-NY-2026 template; lessons 19-23 from CB4 wrap-up
+v1.0 (2026-05): Initial release from the reference project build
+v1.1 (2026-XX): Added DC1-NY-2026 template; lessons 19-23 from the reference project wrap-up
 v1.2 (2026-XX): ...
 -->
 ```
@@ -177,8 +177,8 @@ To add one:
 Before declaring a sanitized XER safe to bundle, manually verify:
 
 - [ ] No client name in PROJECT row
-- [ ] No contractor names (MLP / DAF / OCE / etc.) in activity descriptions
-- [ ] No site / geographic names (Lake Mariner / VA / IN / etc.)
+- [ ] No contractor names (the mechanical / cooling-commissioning / electrical contractors / etc.) in activity descriptions
+- [ ] No site / geographic names (the site / VA / IN / etc.)
 - [ ] No actuals (every status_code = TK_NotStart)
 - [ ] No dates within 30 days of the original data date (if dates left in, makes the project identifiable)
 - [ ] No costs / dollar amounts
@@ -198,7 +198,7 @@ These are project-specific and should never enter the skill:
 - Real client decisions / interpretations (e.g., "Client X said EFA means racks-energized")
 - Real assumptions register entries that name people
 - Real critical-path activity codes (the *pattern* is fine, the specific paths are project)
-- Trade-specific quirks (e.g., "MLP always uses 480V instead of 277V") unless generalized
+- Trade-specific quirks (e.g., "the mechanical contractor always uses 480V instead of 277V") unless generalized
 
 When in doubt: would this be embarrassing or contractually problematic if a competitor saw the bundled skill? If yes, don't include it.
 

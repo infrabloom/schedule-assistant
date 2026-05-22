@@ -41,8 +41,8 @@ Phases 3, 4, and 6 also carry a **[CAPTURE]** step, and Phase 7 a full **build r
 2. Read the **MEL.xlsx** — procurement quantities, lead times, zone mapping
 3. Read the **Keyplan** — cross-reference zones (A-R) to construction Areas
 4. Read **client high-level schedule** — extract contractual milestones (EFA/FA/MEC/TCO/PCO)
-5. Read **electrical contractor schedule** (OCE) — extract per-DH electrical detail
-6. Read **mechanical contractor schedule** (MLP) — extract piping, equipment, commissioning
+5. Read **electrical contractor schedule** — extract per-DH electrical detail
+6. Read **mechanical contractor schedule** — extract piping, equipment, commissioning
 7. Read **prior GC schedule** — extract actuals through data date; FLAG bad logic / duplicates separately, do NOT carry forward
 8. Build a **trade responsibility matrix** — who does what (see `03-trade-responsibility-map.md`)
 
@@ -160,7 +160,7 @@ Phases 3, 4, and 6 also carry a **[CAPTURE]** step, and Phase 7 a full **build r
 3. **Recovery Plan** (if dates slip contract) — compression options, scope-change options, expedite procurement
 4. **Mech Team Questions** — discipline-specific questions for trade meetings
 5. **Procurement Critical-Items Chase List** — by-priority list of procurement items affecting the schedule
-6. **Fragnet xlsx** for mech / electrical commissioning (FluidStack-style format)
+6. **Fragnet xlsx** for mech / electrical commissioning (client-style format)
 7. **P6 Layout** for live status reporting from the schedule
 8. **Final Narrative** documenting everything
 
@@ -175,7 +175,7 @@ Before closing the build, do a retrospective pass and consolidate lesson candida
 
 This is capture, not promotion — nothing changes this skill here. Hand the consolidated log to the schedule-assistant plugin's `/harvest-lessons`, which reviews it with the user and promotes the keepers back into this skill per `MAINTENANCE.md`.
 
-**[CHECKPOINT]** — Stakeholder review (PM + PE + trade leads + commissioning + FluidStack/owner). Include the build retrospective in the review.
+**[CHECKPOINT]** — Stakeholder review (PM + PE + trade leads + commissioning + client/owner). Include the build retrospective in the review.
 
 ---
 

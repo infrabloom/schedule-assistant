@@ -1,6 +1,6 @@
 # Schedule Patterns — Reusable Structure for DC Schedules
 
-Distilled patterns from CB4 and the 3 P6 reference templates. These are **portable** — the structure works across hyperscale DCs. Numbers (counts, durations, dates) are not — replace with project-specific values.
+Distilled patterns from the reference project and the 3 P6 reference templates. These are **portable** — the structure works across hyperscale DCs. Numbers (counts, durations, dates) are not — replace with project-specific values.
 
 ---
 
@@ -70,27 +70,27 @@ Average activity counts per Area (single DH + Mech Room + 2 Yards + Roof). Use a
 | `CONS-DHn-MR-1190` | Mech Room Ready (electrical) | 40h | Gate to L3-MV-EN |
 | `CONS-DHn-MR-2000` | Chiller Plant Equipment Set | 80h | |
 | `CONS-DHn-MR-2010-2020` | CHW Piping Install / Hydrotest | 80h each | |
-| `CONS-DHn-MR-2030` | CHW System Pressure Test | 40h | (retired in CB4 v4.15) |
-| `CONS-DHn-MR-5020` | Flush & Fill (DAF) | 80h | DAF scope |
+| `CONS-DHn-MR-2030` | CHW System Pressure Test | 40h | (retired in the reference project v4.15) |
+| `CONS-DHn-MR-5020` | Flush & Fill (cooling commissioning) | 80h | Cooling-commissioning scope |
 | `CONS-DHn-MR-3000-3070` | Glycol System (ET / piping / charge / test) | 40-80h each | |
 | `CONS-DHn-MR-4000-4010` | Specialty Piping / CDU Loop | 40h each | |
-| `CONS-DHn-MR-7100` | Pump Alignment | 24h | DAF scope |
-| `CONS-DHn-MR-7200` | DAF Test & Commission (pumps, valves, BAS PFC) | 80h | DAF scope, gates L3-CHW |
+| `CONS-DHn-MR-7100` | Pump Alignment | 24h | Cooling-commissioning scope |
+| `CONS-DHn-MR-7200` | Cooling Commissioning Test & Commission (pumps, valves, BAS PFC) | 80h | Cooling-commissioning scope, gates L3-CHW |
 
 ### Data Hall (~10 activities)
 
 | Activity ID pattern | Name | Typical duration | Notes |
 |---|---|---|---|
 | `CONS-DHn-DH-1010` | CDU Set (vendor) | 80h | NOT mech contractor |
-| `CONS-DHn-DH-1020` | DH Branch Power Install | 200h | OCE, often under-stated |
+| `CONS-DHn-DH-1020` | DH Branch Power Install | 200h | Electrical contractor, often under-stated |
 | `CONS-DHn-DH-1030` | DH Lighting / GP Power | 80h | |
 | `CONS-DHn-DH-1040` | DH BMS / Sensors | 40h | |
 | `CONS-DHn-DH-1050` | Containment Install | 80h | Hot/Cold aisle |
-| `CONS-DHn-DH-1060` | CDU Power Connections | 40h | OCE → CDU vendor |
+| `CONS-DHn-DH-1060` | CDU Power Connections | 40h | Electrical contractor → CDU vendor |
 | `CONS-DHn-DH-1070` | Fan Wall Install (vendor) | 80h | NOT mech contractor |
-| `CONS-DHn-DH-1080` | DH Electrical QA/QC | 40h | OCE, FF to FA |
+| `CONS-DHn-DH-1080` | DH Electrical QA/QC | 40h | Electrical contractor, FF to FA |
 | `CONS-DHn-DH-1090` | DH Ready for EFA | 40h | Punchlist before EFA |
-| `CONS-DHn-DH-1100` | Rack Installation | 160h | FluidStack/Owner, ~4 weeks |
+| `CONS-DHn-DH-1100` | Rack Installation | 160h | Client/Owner, ~4 weeks |
 
 ### Yard (East + West, ~8 activities each)
 
@@ -118,15 +118,15 @@ Average activity counts per Area (single DH + Mech Room + 2 Yards + Roof). Use a
 
 | Activity ID pattern | Name | Typical duration | Notes |
 |---|---|---|---|
-| `CX-DHn-L3-MV-EN` | L3 MV Energization | 40h | OCE — verify vs trade duration |
-| `CX-DHn-L3-LV-EN` | L3 LV Energization | 40h | OCE — verify vs trade duration |
-| `CX-DHn-L3-UPS` | L3 UPS Functional | 80h | OCE / vendor |
-| `CX-DHn-L3-GEN` | L3 Generator Functional | 80h | OCE / vendor |
+| `CX-DHn-L3-MV-EN` | L3 MV Energization | 40h | Electrical contractor — verify vs trade duration |
+| `CX-DHn-L3-LV-EN` | L3 LV Energization | 40h | Electrical contractor — verify vs trade duration |
+| `CX-DHn-L3-UPS` | L3 UPS Functional | 80h | Electrical contractor / vendor |
+| `CX-DHn-L3-GEN` | L3 Generator Functional | 80h | Electrical contractor / vendor |
 | `CX-DHn-L3-CDU` | L3 CDU Functional | 80h | CDU vendor (test power OK?) |
-| `CX-DHn-L3-CHW` | L3 CHW Functional + Water Quality | 80h | DAF |
+| `CX-DHn-L3-CHW` | L3 CHW Functional + Water Quality | 80h | Cooling-commissioning contractor |
 | `CX-DHn-L3-CONT-VER` | Containment Verification | 8h | CxA, pre-FA |
 | `CX-DHn-ENERGIZE` | DH Energize hold-point | 56h | Utility coordination |
-| `CX-DHn-FOD-WALK` | FOD Walks | 8h | GC / FluidStack |
+| `CX-DHn-FOD-WALK` | FOD Walks | 8h | GC / Client |
 | `CX-DHn-L4-ATS` | L4 IST (ATS, integrated) | 40h | Post-FA |
 | `CX-DHn-L5-LB` | L5 Load Bank IST | 80h | A+B feeds, post-FA |
 | `MS-EFA-DHn` | Milestone: EFA | TT_FinMile | Contractual |
@@ -178,7 +178,7 @@ This means procurement finish ≤ install finish - 0h. Install can start before 
 
 ## 5. Build-Sequence Stagger
 
-**Default CB4 pattern:** 4 crews flow through 4 areas with **3-week stagger** per area. Common variants:
+**Default reference-project pattern:** 4 crews flow through 4 areas with **3-week stagger** per area. Common variants:
 - 4-week stagger (more conservative, less crew conflict)
 - 2-week stagger (aggressive, requires more crews)
 - N-to-S vs S-to-N (project-specific)
@@ -208,16 +208,16 @@ A typical mech room buildout follows this pattern (post-shell-complete):
 7. **Chiller plant equipment set** — chiller, pumps, ET tank
 8. **CHW piping install** — copper / steel / pre-insulated
 9. **Hydrotest** — pressure test all piping
-10. **Flush & Fill** — flush with clean fluid, fill with glycol/treated water (DAF scope)
-11. **Pump alignment + DAF T&C** — final mech tune-up (DAF scope)
+10. **Flush & Fill** — flush with clean fluid, fill with glycol/treated water (cooling-commissioning scope)
+11. **Pump alignment + cooling-commissioning T&C** — final mech tune-up (cooling-commissioning scope)
 12. **Feeder terminations** — MV, LV, UPS, Mech (electrical scope)
 13. **Mech Room Ready** — punchlist, AHJ inspection, gate to L3 commissioning
 
 **Notes:**
 - Steps 1-6 are roughly parallel (different crews).
 - Step 8 (piping) gates step 9 (hydrotest) gates step 10 (Flush & Fill).
-- Step 11 is DAF — they own pump alignment, valve checks, BAS PFC.
-- Step 12 is OCE — terminations happen after equipment is set, before energization.
+- Step 11 is the cooling-commissioning contractor — they own pump alignment, valve checks, BAS PFC.
+- Step 12 is the electrical contractor — terminations happen after equipment is set, before energization.
 - Step 13 is the punchlist gate before L3-MV-EN starts.
 
 ---
@@ -265,7 +265,7 @@ Every assumption should be tracked. Suggested columns:
 
 | ID | Category | Assumption | Source | Date assumed | Impact if wrong | Status |
 |---|---|---|---|---|---|---|
-| A1 | Commissioning | L3-CDU can run on test power | Patrick / DAF verbal | 2026-05-01 | DH4 EFA pushes 3 weeks | Open — awaiting CxA |
+| A1 | Commissioning | L3-CDU can run on test power | PM / cooling-commissioning contractor verbal | 2026-05-01 | DH4 EFA pushes 3 weeks | Open — awaiting CxA |
 | A2 | Procurement | Remaining STS arrive by 5/22 | Procurement team verbal | 2026-05-08 | DH4 EFA pushes ~3 months if late | Open |
 | ... | | | | | | |
 

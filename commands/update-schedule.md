@@ -21,14 +21,31 @@ Locations:
 > not the same phases as `/build-schedule`, `/harvest-lessons`, or the skill's build
 > method. Each section leads with its name; the `update phase N` tag is just ordering.
 
+> **Precondition - the project must be set up first.** `/update-schedule`
+> maintains an *existing* schedule project. Before anything else, check the
+> connected folder has a `project.yaml` and the `inputs/ outputs/ inbox/
+> changesets/` structure. If it does not - an empty or bare folder - the project
+> has not been set up: **stop and tell the user to run `/start-project` and choose
+> the takeover path.** That scaffolds the folder, places the current schedule XER
+> in `outputs/` as the base, and captures the milestones and source hierarchy into
+> `project.yaml` - everything this command needs. `/update-schedule` does not
+> scaffold; it expects a set-up project.
+
 ## Intake · update phase 1
-Identify what is new since the last update: meeting minutes, refreshed OCE / MLP
-detailed schedules, MEL changes, or direct OPC edits (check the project inbox). If
-unclear, ask which files to process. Establish the current **base XER** - the latest
-committed XER, or, if the user edited directly in OPC, the freshly exported XER
-(diff it against the last committed XER first, so the edits are captured). On the
-first update after `/start-project` set up the project, the base XER is the one
-`/start-project` placed in `outputs/`.
+Identify what is new since the last update: meeting minutes, refreshed trade
+schedules, equipment-list changes, or direct OPC edits.
+
+> New files for an update go in the project's **`inbox/`** folder. Ask the user to
+> drop them there with their **file manager** (File Explorer on Windows, Finder on
+> Mac) - **not** by uploading them into the chat. The assistant reads them
+> straight from `inbox/`; uploading large schedule files into the conversation
+> bloats it and slows everything down.
+
+Read what is in `inbox/`; if unclear, ask which files to process. Establish the
+current **base XER** - the latest committed XER, or, if the user edited directly
+in OPC, the freshly exported XER (diff it against the last committed XER first, so
+the edits are captured). On the first update after `/start-project` set up the
+project, the base XER is the one `/start-project` placed in `outputs/`.
 
 ## Analysis & draft change-set · update phase 2
 Read every new input. Resolve conflicts by the source-of-truth hierarchy in the
@@ -38,7 +55,8 @@ YAML per docs/changeset-schema.md:
 - base_xer: the current base; update_xer: the next versioned XER
 - one operation per change; every operation needs a plain-language reason and a
   source citation (file name, meeting + timestamp, or analysis reference)
-- never invent a duration or a logic tie - cite OCE / MLP / MEL / LMDC
+- never invent a duration or a logic tie - cite the trade schedule, the equipment
+  list, or the contract document it came from
 - keep predicted_impact brief; the Impact preview computes the real numbers
 Save as changesets/CS-NNN-<slug>.yaml. Write it via the shell (reliable on this folder).
 
@@ -73,7 +91,7 @@ After the commit, append any lesson candidates from this run to the project's
 - an input carried bad or self-contradictory logic that had to be flagged
 - a source-of-truth conflict had to be resolved
 - the user overrode or revised a proposed change at the approval gate
-- a duration or logic tie deviated > 1 shift from OCE / MLP's stated value
+- a duration or logic tie deviated > 1 shift from the trade's stated value
 - a validator or duplicate-audit issue surfaced and was corrected
 - this change-set reversed or corrected an earlier change-set
 

@@ -1,30 +1,30 @@
 # Trade Responsibility Map — Who Owns What
 
-This is the **generic** version. Replace trade names (MLP, OCE, DAF, etc.) with your project's actual contractors. The role/scope split is what's portable.
+This is the **generic** version. Replace the generic trade descriptions with your project's actual contractors. The role/scope split is what's portable.
 
 ---
 
 ## The Big Picture — 6 Primary Trade Roles
 
-| Role | Generic name | What they own | CB4 example |
+| Role | Generic name | What they own | Example |
 |---|---|---|---|
-| **Mech Install** | Mech Contractor | Set chillers, pumps, piping, hydrotest | MLP (Mech Lead Partner) |
-| **Mech Commissioning** | Mech CxA / Cooling SI | Flush & Fill, pump alignment, BAS PFC, L3-CHW, L3-CDU support | DAF (Cooling Commissioning) |
-| **Electrical Install + Commissioning** | Electrical Contractor | All electrical install + L3 energization | OCE (On-site Construction Electrical) |
+| **Mech Install** | Mech Contractor | Set chillers, pumps, piping, hydrotest | The mechanical contractor (mechanical lead partner) |
+| **Mech Commissioning** | Mech CxA / Cooling SI | Flush & Fill, pump alignment, BAS PFC, L3-CHW, L3-CDU support | The cooling-commissioning contractor |
+| **Electrical Install + Commissioning** | Electrical Contractor | All electrical install + L3 energization | The electrical contractor (on-site construction electrical) |
 | **CDU Vendor** | Cooling Distribution Unit installer | CDU set + power connections + L1 FAT + L3 functional support | Schneider / Vertiv (NOT mech contractor) |
-| **Fan Wall Vendor** | Fan Wall installer | Fan Wall set + commissioning | Vendor TBD on CB4 — DAF procures but does NOT install |
-| **Rack Install** | Owner / Owner's vendor | Rack install + cabling + ITSM | FluidStack (owner-direct) |
+| **Fan Wall Vendor** | Fan Wall installer | Fan Wall set + commissioning | Vendor TBD — the cooling-commissioning contractor procures but does NOT install |
+| **Rack Install** | Owner / Owner's vendor | Rack install + cabling + ITSM | The client (owner-direct) |
 
 **Supporting roles:**
-| Role | Generic | CB4 example |
+| Role | Generic | Example |
 |---|---|---|
 | Commissioning Authority | CxA (third-party) | TBD |
-| AHJ Inspector | Local authority | Town of Lake Mariner / NY State |
+| AHJ Inspector | Local authority | Local town / state authority |
 | Fire Protection | Fire contractor | Separate vendor |
 | BMS Programmer | Controls integrator | Often Schneider or Honeywell |
-| Civil / Sitework | Site GC sub | Contour (CB4) |
-| Concrete | Concrete sub | Grove (CB4) |
-| Earthwork | Earthwork sub | Danforth (CB4) |
+| Civil / Sitework | Site GC sub | Civil/sitework subcontractor |
+| Concrete | Concrete sub | Concrete subcontractor |
+| Earthwork | Earthwork sub | Earthwork subcontractor |
 
 ---
 
@@ -32,7 +32,7 @@ This is the **generic** version. Replace trade names (MLP, OCE, DAF, etc.) with 
 
 This is the most-confused split on every DC project. Be explicit.
 
-| Activity | Mech Install (MLP) | Mech CxA (DAF) |
+| Activity | Mech Install (mechanical contractor) | Mech CxA (cooling-commissioning contractor) |
 |---|---|---|
 | Chiller set in place | ✅ | |
 | Pump set in place | ✅ | |
@@ -55,7 +55,7 @@ This is the most-confused split on every DC project. Be explicit.
 
 ## Detailed Scope Split — Electrical Install vs Electrical Commissioning
 
-Usually the same contractor (OCE) does both, but the L3 commissioning piece may have a separate CxA witness.
+Usually the same contractor (the electrical contractor) does both, but the L3 commissioning piece may have a separate CxA witness.
 
 | Activity | Electrical Install | Electrical CxA (witness) |
 |---|---|---|
@@ -72,8 +72,8 @@ Usually the same contractor (OCE) does both, but the L3 commissioning piece may 
 | Relay testing | ✅ (or third-party relay tester) | ✅ witness |
 | **L3 MV Energization** | ✅ (lead) | ✅ witness |
 | **L3 LV Energization** | ✅ (lead) | ✅ witness |
-| **L3 UPS Functional** | ✅ (vendor or OCE) | ✅ witness |
-| **L3 Generator Functional** | ✅ (vendor or OCE) | ✅ witness |
+| **L3 UPS Functional** | ✅ (vendor or electrical contractor) | ✅ witness |
+| **L3 Generator Functional** | ✅ (vendor or electrical contractor) | ✅ witness |
 | **L4 IST (ATS, integrated)** | ✅ (with CxA) | ✅ lead |
 | **L5 Load Bank IST** | | ✅ lead |
 
@@ -96,7 +96,7 @@ Usually the same contractor (OCE) does both, but the L3 commissioning piece may 
 | L2 PFC (CDU) | ✅ | | |
 | **L3 CDU Functional** | ✅ (lead) | ✅ support (CHW side) | ✅ support (power side) |
 
-**On CB4:** Mech contractor (MLP) does NOT install CDUs. This is a separate vendor. Schedule activities should reference the CDU vendor explicitly.
+**On the reference project:** The mech contractor does NOT install CDUs. This is a separate vendor. Schedule activities should reference the CDU vendor explicitly.
 
 ---
 
@@ -116,7 +116,7 @@ Usually the same contractor (OCE) does both, but the L3 commissioning piece may 
 | L2 PFC (Fan Wall) | ✅ | | |
 | **L3 Fan Wall Functional** | ✅ (lead) | | ✅ support (power) |
 
-**On CB4:** DAF (cooling commissioning) procures Fan Walls but does NOT install. Installer is TBD as of v4.15 — flag as open item.
+**On the reference project:** The cooling-commissioning contractor procures Fan Walls but does NOT install. Installer is TBD as of v4.15 — flag as open item.
 
 ---
 
@@ -131,7 +131,7 @@ Usually the same contractor (OCE) does both, but the L3 commissioning piece may 
 | Rack IT load test | ✅ | |
 | FA gate | ✅ (acceptance) | |
 
-**Typical rack install duration:** 4 weeks per DH (FluidStack on CB4). Varies widely — confirm with owner.
+**Typical rack install duration:** 4 weeks per DH (the client on the reference project). Varies widely — confirm with owner.
 
 ---
 
@@ -170,7 +170,7 @@ The CxA signs off on the **L3/L4/L5 completion certificates** which gate EFA / F
 
 ## Common Confusion Points (Read These Twice)
 
-1. **"Mech contractor" is NOT one entity.** It's usually Install (e.g., MLP) + Commissioning (e.g., DAF). They're different scopes, different schedules, different invoices.
+1. **"Mech contractor" is NOT one entity.** It's usually Install (the mechanical contractor) + Commissioning (the cooling-commissioning contractor). They're different scopes, different schedules, different invoices.
 
 2. **CDUs are NOT installed by the mech contractor.** Separate vendor. Get the vendor name early.
 
@@ -178,11 +178,11 @@ The CxA signs off on the **L3/L4/L5 completion certificates** which gate EFA / F
 
 4. **L3 commissioning is owned by the trade**, but witnessed by the CxA. The signoff certificate is the CxA's.
 
-5. **Rack install is owner scope.** Don't put it under the GC trade. FluidStack on CB4 — different name on every project.
+5. **Rack install is owner scope.** Don't put it under the GC trade. The client on the reference project — different name on every project.
 
-6. **Flush & Fill is commissioning scope, not install scope.** It's where fluid first enters the system, which means it's commissioning. Owned by the cooling commissioning trade (DAF on CB4).
+6. **Flush & Fill is commissioning scope, not install scope.** It's where fluid first enters the system, which means it's commissioning. Owned by the cooling commissioning trade (the cooling-commissioning contractor on the reference project).
 
-7. **AFEED/BFEED energization** is **utility company scope**, not OCE. OCE may coordinate, but the date is owned by the utility. Track separately.
+7. **AFEED/BFEED energization** is **utility company scope**, not the electrical contractor. The electrical contractor may coordinate, but the date is owned by the utility. Track separately.
 
 ---
 
@@ -192,10 +192,10 @@ For each activity in the schedule, document:
 
 | Activity ID | Activity Name | Lead Trade | Supporting Trades | Witness/CxA |
 |---|---|---|---|---|
-| CONS-DH4-MR-1000 | MV SWGR Set | OCE | Rigger | — |
-| CONS-DH4-MR-5020 | Flush & Fill (DAF) | DAF | MLP | CxA |
-| CX-DH4-L3-CDU | L3 CDU Functional | CDU Vendor | DAF, OCE | CxA |
-| CX-DH4-L5-LB | L5 Load Bank | CxA | OCE, FluidStack | Owner witness |
+| CONS-DH4-MR-1000 | MV SWGR Set | Electrical contractor | Rigger | — |
+| CONS-DH4-MR-5020 | Flush & Fill | Cooling-commissioning contractor | Mechanical contractor | CxA |
+| CX-DH4-L3-CDU | L3 CDU Functional | CDU Vendor | Cooling-commissioning contractor, electrical contractor | CxA |
+| CX-DH4-L5-LB | L5 Load Bank | CxA | Electrical contractor, client | Owner witness |
 | ... | | | | |
 
 Maintain this as a separate spreadsheet, or roll into the schedule narrative.

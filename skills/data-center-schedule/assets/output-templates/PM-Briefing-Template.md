@@ -57,7 +57,7 @@
 - **Procurement → install FF tie** for long-lead equipment, FS for commodity
 - **3-week-per-area stagger** per Build Sequence PDF
 - **EFA gated by:** L3-CDU + L3-CHW + Containment Verify + FOD Walks + DH Electrical QA/QC
-- **FA gated by:** EFA + Rack Install (160h = 4 weeks per FluidStack)
+- **FA gated by:** EFA + Rack Install (160h = 4 weeks per the client)
 - **PCO gated by:** FA + L5 Load Bank IST + B-Feed live
 
 ---
@@ -125,7 +125,7 @@ See `Assumptions-Register.md` for full list.
 - **Mech Trade:** [key message]
 - **Electrical Trade:** [key message]
 - **CxA:** [key message]
-- **FluidStack / IT vendor:** [key message]
+- **Client / IT vendor:** [key message]
 
 ---
 

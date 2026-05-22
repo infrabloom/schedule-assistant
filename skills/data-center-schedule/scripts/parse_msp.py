@@ -1,5 +1,5 @@
 """
-parse_msp.py -- parser for Microsoft Project XML schedules (OCE + MLP source files).
+parse_msp.py -- parser for Microsoft Project XML schedules (electrical + mechanical trade source files).
 
 MSP XML facts that matter here:
   - namespace http://schemas.microsoft.com/project
@@ -145,7 +145,7 @@ def load(path):
     return Proj(header, tasks, cals)
 
 
-# extract a CB4-style activity code from the Name, e.g. "(CB4.CONS.OCE.3200)"
+# extract a bracketed activity code from the Name, e.g. "(PRJ.CONS.ELEC.3200)"
 _CODE = re.compile(r"\(([A-Za-z0-9.\-/ ]+)\)\s*$")
 
 

@@ -13,7 +13,7 @@ Track every "I don't know yet" as a chase-list item. Each item: assumption baked
 | M1 | | | | |
 | M2 | | | | |
 
-## B. Mechanical Commissioning (DAF-style trade)
+## B. Mechanical Commissioning (cooling-commissioning contractor)
 
 | # | Question | Current assumption | Ask | Impact if wrong |
 |---|---|---|---|---|

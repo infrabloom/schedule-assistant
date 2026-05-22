@@ -59,7 +59,7 @@ history of the *tool*; it is distinct from each project's own `CHANGELOG.md`,
 which is the schedule's per-change-set audit trail.
 
 ## Per-project setup
-The plugin is generic. Each project (CB4, CB5, ...) keeps its own folder:
+The plugin is generic. Each project (DC1, DC2, ...) keeps its own folder:
 ```
 inputs/  outputs/  inbox/  changesets/  build-brief.yaml  project.yaml  CHANGELOG.md  lessons-log.md
 ```

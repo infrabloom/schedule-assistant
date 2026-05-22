@@ -3,7 +3,7 @@
 `assets/p6-templates/` holds three **sanitized** hyperscale data center
 construction schedules, kept as **structural / domain reference** for Phase 1.
 This file records what they are and what to learn from them -- a deliberate
-second data point alongside the CB4 experience the rest of this skill is built
+second data point alongside the reference project experience the rest of this skill is built
 on, not "forgotten" attachments.
 
 ## The three templates
@@ -42,15 +42,15 @@ Cooling Fabrication" procurement branch (AI-era cooling scope).
 
 ## What the templates teach (portable patterns)
 
-1. **Hyperscale DC schedules are organized by a repeating unit.** TeraWulf calls
-   it a Data Hall (x4); these templates call it a Phase / Unit (x7-12 per
+1. **Hyperscale DC schedules are organized by a repeating unit.** The reference
+   project calls it a Data Hall (x4); these templates call it a Phase / Unit (x7-12 per
    building). The skill's "build the first unit, replicate the rest" logic
    generalizes -- only the unit's name and count are project-specific.
 2. **WBS top level is consistent:** Milestones / (Schedule) Issues / Procurement
    / Construction / Commissioning(Startup), plus Preconstruction, Final
    Inspections, Closeout. Matches the WBS pattern in `02-schedule-patterns.md`.
-3. **Owner milestone vocabulary differs -- same shape, different names.** CB4 /
-   TeraWulf: SWD -> EFA -> FA -> FR -> RFS. A second common hyperscale-owner
+3. **Owner milestone vocabulary differs -- same shape, different names.** The
+   reference project: SWD -> EFA -> FA -> FR -> RFS. A second common hyperscale-owner
    pattern (seen across all three templates): Build Start -> Long-Lead-Equipment
    / OFCI On-Site Dates -> FEA -> NEA -> H2C -> PFHO -> PCO. Both run
    early-access -> handover -> completion. Map the new owner's vocabulary
@@ -108,7 +108,7 @@ the closest template in Phase 1 rather than copying them.
   owners keep. Consistent with `assets/p6-templates/README.md`.
 - **Schedule size** -- the templates calibrate `09-schedule-levels.md`:
   size = repeating-unit count x density level.
-- The skill is written in TeraWulf / CB4 / "Data Hall" terms; the templates show
+- The skill is written in the reference project's "Data Hall" terms; the templates show
   a second owner-model (Phase/Unit, an FEA/NEA/H2C/PFHO milestone set, an Issues
   branch). No contradiction -- the methodology holds; the templates broaden it.
 

@@ -1,9 +1,9 @@
 """
 Unit tests for predict_milestones.contract_milestones.
 
-Milestone detection must work for any project's naming convention, not just
-CB4's - these tests pin the generic default pattern and confirm a custom
-pattern (from project.yaml) overrides it.
+Milestone detection must work for any project's naming convention - these tests
+pin the generic default pattern and confirm a custom pattern (from project.yaml)
+overrides it.
 
 Run from the plugin root:  python -m unittest discover -s tests -v
 Requires Python 3.9+.

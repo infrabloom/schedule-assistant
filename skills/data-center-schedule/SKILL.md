@@ -1,15 +1,16 @@
 ---
 name: data-center-schedule
-description: "Use this skill for hyperscale data center scheduling work — building, auditing, replicating, or refreshing a Primavera P6 / OPC schedule. Triggers include starting a new DC schedule, taking over from a prior scheduler, building or editing XER files, EFA / FA / FR / RFS / MEC / TCO / PCO milestones, sequencing mech rooms / data halls / yards / roof / MMR, multi-DH replication with N-week stagger, L1-L5 commissioning (FAT / PFC / Functional / IST / Load Bank), procurement-to-install ties for long-lead equipment (STS, CDU, Fan Wall, MV switchgear, UPS, generators), trade responsibility mapping, weekly refreshes from OCE / MLP MS-Project XMLs, reconciling MEL against the schedule, or fixing OPC import errors (PRM-009010001, missing milestones, CS_MEO drops, case-insensitive task code collisions). Use proactively whenever the user mentions data centers, hyperscale, P6, OPC, XER, EFA, FA, FR, RFS, PCO, commissioning, or TeraWulf — even if they don't explicitly name P6."
+description: "Use this skill for hyperscale data center scheduling work — building, auditing, replicating, or refreshing a Primavera P6 / OPC schedule. Triggers include starting a new DC schedule, taking over from a prior scheduler, building or editing XER files, EFA / FA / FR / RFS / MEC / TCO / PCO milestones, sequencing mech rooms / data halls / yards / roof / MMR, multi-DH replication with N-week stagger, L1-L5 commissioning (FAT / PFC / Functional / IST / Load Bank), procurement-to-install ties for long-lead equipment (STS, CDU, Fan Wall, MV switchgear, UPS, generators), trade responsibility mapping, weekly refreshes from electrical / mechanical contractor MS-Project XMLs, reconciling MEL against the schedule, or fixing OPC import errors (PRM-009010001, missing milestones, CS_MEO drops, case-insensitive task code collisions). Use proactively whenever the user mentions data centers, hyperscale, P6, OPC, XER, EFA, FA, FR, RFS, PCO, or commissioning — even if they don't explicitly name P6."
 ---
 
 <!-- Changelog
-v1.0 (2026-05-12): Initial release from CB4 build (v1 -> v4.15 cycle)
-v1.1 (2026-05-17): Folded in CB4 v2/v3 rebuild — OCE/3 calendar conversion, many-to-one
-                   aggregation, retie residue, cross-DH FS anti-pattern, MEL reconciliation,
-                   F&F sequence, FluidStack-vs-TeraWulf scope split, OPC case-insensitive
-                   uniqueness, GUID base64 (not urlsafe), midnight time rejection. Added
-                   validate_xer_v2.py and the 11-agent agentic workflow pattern (ref 07).
+v1.0 (2026-05-12): Initial release from the reference project build (v1 -> v4.15 cycle)
+v1.1 (2026-05-17): Folded in the reference project's v2/v3 rebuild — electrical-contractor/3
+                   calendar conversion, many-to-one aggregation, retie residue, cross-DH FS
+                   anti-pattern, MEL reconciliation, F&F sequence, client-vs-owner scope split,
+                   OPC case-insensitive uniqueness, GUID base64 (not urlsafe), midnight time
+                   rejection. Added validate_xer_v2.py and the 11-agent agentic workflow
+                   pattern (ref 07).
 v1.3 (2026-05-21): Merged the two validators into one comprehensive validate_xer.py
                    (21 FAIL + 7 WARN checks); added cohesion_audit.py; bundled the MSP
                    toolchain (parse_msp / analyze_msp / crosscheck_msp); added references
@@ -39,7 +40,7 @@ v1.8 (2026-05-22): Wired the lessons pipeline into the phased workflow -- [CAPTU
                    schedule-assistant plugin's /harvest-lessons (review + promote).
 v1.9 (2026-05-22): Documentation cleanup -- corrected stale internal references
                    left from an earlier file reorg (old NN-CamelCase paths like
-                   02-P6-Templates / 05-Output-Templates / 08-Lessons-Learned-CB4,
+                   02-P6-Templates / 05-Output-Templates / 08-Lessons-Learned,
                    and validate_xer_v2.py -> validate_xer.py) across the phased
                    workflow, kickoff checklist, lessons-learned, agentic-pattern
                    reference, and scripts README; corrected the validator WARN
@@ -69,21 +70,27 @@ v1.14 (2026-05-22): Final polish -- build_xer_starter.py no longer prints a
                    non-ASCII arrow that crashed a Windows cp1252 console
                    (replaced with ASCII); cleared the ambiguous "increment 2"
                    jargon from the change-set schema.
+v1.15 (2026-05-22): Full sanitization -- genericized every reference to the
+                   original project across all skill references, SKILL.md, and
+                   scripts: owner / client / site / contractor / contract names
+                   and building codes are now generic ("the owner", "the
+                   electrical contractor", "the reference project", etc.). The
+                   lessons and patterns are unchanged; only the names are gone.
 -->
 
 # Data Center Schedule Toolkit
 
-A reusable framework for building, auditing, and replicating Primavera P6 / OPC schedules on hyperscale data center projects. Distilled from two full rebuilds of the **CB4** schedule (TeraWulf, Lake Mariner) — every pattern, pitfall, and convention here is from real production experience. Designed to be **portable to the next TeraWulf build** (CB5, CB6, …) or any equivalent hyperscale owner-side project.
+A reusable framework for building, auditing, and replicating Primavera P6 / OPC schedules on hyperscale data center projects. Distilled from two full rebuilds of **the reference project** schedule (a hyperscale owner-side build) — every pattern, pitfall, and convention here is from real production experience. Designed to be **portable to the next build in the same program** or any equivalent hyperscale owner-side project.
 
 ## When to use this skill
 
 Use it for any of these:
-- Starting a new DC schedule from scratch (e.g., CB5)
+- Starting a new DC schedule from scratch (e.g., a new building)
 - Taking over a schedule that has issues (broken logic, duplicates, missing actuals)
 - Replicating a single Data Hall pattern across multiple DHs
 - Building/repairing XER files for OPC import
 - Auditing a schedule for orphans, duplicates, cycles, or constraint errors
-- Running the **weekly refresh loop** from OCE / MLP detailed schedules
+- Running the **weekly refresh loop** from the electrical and mechanical contractors' detailed schedules
 - Reconciling the schedule against the MEL (Master Equipment List)
 - Answering questions about EFA/FA/FR/RFS/MEC/TCO/PCO scope or L1-L5 commissioning
 - Determining trade responsibility (who owns CDU install? Fan Wall? Flush & Fill?)
@@ -116,7 +123,7 @@ Phase 4: Build first DH      -> One Data Hall fully built + OPC-validated
 Phase 5: Replicate           -> Scale to all DHs + Admin + apply stagger + actuals
 Phase 6: QA & Validation     -> No orphans, no duplicates, no cycles, OPC-importable
 Phase 7: Deliverables        -> PM briefing, narrative, fragnets, P6 layouts
-Weekly:  Refresh Loop        -> Diff OCE/MLP XMLs, transfer actuals, change log
+Weekly:  Refresh Loop        -> Diff electrical/mechanical contractor XMLs, transfer actuals, change log
 ```
 
 At every CHECKPOINT, **stop and present findings to the user**. Do not proceed without explicit approval. This is the single most important rule in this skill — checkpoints exist to catch logic errors before they cascade.
@@ -146,11 +153,11 @@ For each phase, you'll need different references. Reading just `SKILL.md` is not
 For Phase 4 (building) and Phase 6 (validation), use the Python scripts in `scripts/`:
 
 - `scripts/build_xer_starter.py` -- skeleton XER generator. Copy to the project's outputs folder, rename `build_xer_v1.py`, edit metadata + activity catalog + ties, run. **For minimal test XERs only -- a production build must clone a real template row (see lesson #38).**
-- `scripts/validate_xer.py` -- **the single comprehensive validator** (21 FAIL + 7 WARN checks: every OPC-import and logic-integrity failure mode from CB4). **Always run before delivering any XER.** Replaces the former validate_xer.py + validate_xer_v2.py.
+- `scripts/validate_xer.py` -- **the single comprehensive validator** (21 FAIL + 7 WARN checks: every OPC-import and logic-integrity failure mode from the reference project). **Always run before delivering any XER.** Replaces the former validate_xer.py + validate_xer_v2.py.
 - `scripts/cohesion_audit.py` -- detailed pre-delivery orphan / dead-end report, grouped by WBS. Mandatory before delivery.
 - `scripts/duplicate_audit.py` -- scans for duplicate activities by code, name, and fuzzy keyword. Run before merging any legacy schedule.
 - `scripts/parse_xer.py` -- generic XER reader; library for custom analysis.
-- `scripts/parse_msp.py` -- Microsoft Project XML reader for OCE / MLP trade schedules (direct-child field extraction, ISO-8601 durations, calendar parsing).
+- `scripts/parse_msp.py` -- Microsoft Project XML reader for electrical / mechanical contractor trade schedules (direct-child field extraction, ISO-8601 durations, calendar parsing).
 - `scripts/analyze_msp.py` -- empirically derives a trade file's true duration basis, so the calendar conversion is measured, not guessed (see lesson #20).
 - `scripts/crosscheck_msp.py` -- cross-checks MSP durations vs planned dates vs %complete.
 - `scripts/sanitize_xer.py` -- strip a real project XER to a reusable template (for contribution-back; see `MAINTENANCE.md`)
@@ -174,7 +181,7 @@ Copy + fill in for the specific project.
 
 ## Core conventions to enforce
 
-These are non-negotiable on every DC schedule project. They come from real CB4 failures (see `references/06-lessons-learned.md` for the full stories):
+These are non-negotiable on every DC schedule project. They come from real failures on the reference project (see `references/06-lessons-learned.md` for the full stories):
 
 1. **Constraint codes in OPC:** Use only `CS_MEOA` (Finish On or After), `CS_MEOB` (FNL, Finish On or Before), `CS_MSOA` (SNE, Start On or After). **Never** use `CS_MEO` or `CS_MSO` — OPC silently drops them and milestones vanish from import.
 
@@ -197,15 +204,15 @@ These are non-negotiable on every DC schedule project. They come from real CB4 f
 
 8. **Procurement-to-install convention:** FF (finish-to-finish) for long-lead equipment (MV SWGR, transformers, STS, UPS, CDU, Fan Wall, chillers); FS for commodity. Document in the assumptions register.
 
-9. **Cross-discipline calendar conversion:** an MSP `<Duration>` is in (displayed days x MinutesPerDay/60) PT-hours. Derive the factor `8 / (MinutesPerDay/60)` per trade file -- it is **/3 for OCE** (1440 min/day) and **1 for MLP** (480 min/day), but never hardcode /3. Run `scripts/analyze_msp.py` to confirm the basis empirically. This is the single most common source of duration errors. See lesson #20.
+9. **Cross-discipline calendar conversion:** an MSP `<Duration>` is in (displayed days x MinutesPerDay/60) PT-hours. Derive the factor `8 / (MinutesPerDay/60)` per trade file -- it is **/3 for the electrical contractor** (1440 min/day) and **1 for the mechanical contractor** (480 min/day), but never hardcode /3. Run `scripts/analyze_msp.py` to confirm the basis empirically. This is the single most common source of duration errors. See lesson #20.
 
-10. **Many-to-one aggregation:** OCE/MLP detailed schedules have fine-grained per-area sub-activities; the high-level schedule has aggregate activities (e.g., one `MR-1105` per DH represents 8+ OCE leaves). Build an explicit **OCE-leaf -> v3-task crosswalk catalog** as a one-time investment, then drive every weekly refresh from it. See lesson #22 and `references/07-agentic-workflow-pattern.md` (Catalog Builder agent).
+10. **Many-to-one aggregation:** the electrical and mechanical contractors' detailed schedules have fine-grained per-area sub-activities; the high-level schedule has aggregate activities (e.g., one `MR-1105` per DH represents 8+ electrical-contractor leaves). Build an explicit **electrical-contractor-leaf -> v3-task crosswalk catalog** as a one-time investment, then drive every weekly refresh from it. See lesson #22 and `references/07-agentic-workflow-pattern.md` (Catalog Builder agent).
 
 11. **Stagger pattern:** Apply the project's per-DH stagger explicitly in activity start dates. Surface conflicts with contractual milestone dates immediately.
 
 12. **No cross-DH crew chains.** Multiple crews work in parallel across DHs. Tying DH3 install activities as successors to DH4 install activities is **wrong** — it forces serial execution and inflates the schedule by 9+ weeks. Use the stagger pattern (date offsets) instead of pred chains. See lesson #26.
 
-13. **Trade scope clarity:** CDUs are FluidStack scope (or vendor-installed — Schneider/Vertiv); Fan Walls are vendor scope. Flush & Fill is cooling commissioning scope (DAF-style trade), not install. Rack install is owner scope. Get the project's specific trade map locked in Phase 1.
+13. **Trade scope clarity:** CDUs are client scope (or vendor-installed — Schneider/Vertiv); Fan Walls are vendor scope. Flush & Fill is cooling commissioning scope (a cooling-commissioning contractor's trade), not install. Rack install is owner scope. Get the project's specific trade map locked in Phase 1.
 
 ## Working rules (always apply)
 
@@ -224,32 +231,32 @@ These apply universally:
 
 ## Project-specific things to leave behind
 
-When using this skill on a **new** project (e.g., CB5), do **not** carry forward:
+When using this skill on a **new** project, do **not** carry forward:
 
-- Specific contractual dates (e.g., CB4's EFA Jun 15, FA Jul 31)
-- Specific trade names (MLP, DAF, OCE, Contour, Grove, Danforth — all CB4-specific)
-- Specific equipment counts (8 MV SWGRs, 192 STS, 72 Dry Coolers — CB4-specific)
-- Client-specific scope interpretations (FluidStack's EFA = cooling-live, FA = racks)
+- Specific contractual dates (e.g., the reference project's EFA Jun 15, FA Jul 31)
+- Specific trade names (the mechanical contractor, the cooling-commissioning contractor, the electrical contractor, and any other named subs — all reference-project-specific)
+- Specific equipment counts (8 MV SWGRs, 192 STS, 72 Dry Coolers — reference-project-specific)
+- Client-specific scope interpretations (the client's EFA = cooling-live, FA = racks)
 - Specific actuals or progress percentages
 
-The **pattern** (WBS shape, sequencing logic, L1-L5, FF procurement ties, no-orphans rule, validation checklist, MEL reconciliation, OCE/3 conversion, weekly refresh loop) is portable. The **numbers** are not.
+The **pattern** (WBS shape, sequencing logic, L1-L5, FF procurement ties, no-orphans rule, validation checklist, MEL reconciliation, electrical-contractor/3 conversion, weekly refresh loop) is portable. The **numbers** are not.
 
-## TeraWulf-specific carry-forward (for the next CB-series project)
+## Program-specific carry-forward (for the next project in the same program)
 
-These are TeraWulf conventions that **do** carry from CB4 to CB5/CB6/…:
+These are owner conventions that **do** carry from the reference project to later buildings in the same program:
 
-- **Owner-side scheduler model:** TeraWulf owns the schedule; the GC manages subs (OCE, MLP, DAF, Ramboll, etc.); the schedule gives all parties one shared view.
-- **Contractual milestones:** EFA -> FA -> FR -> RFS per DH (per LMDC turnover dates).
+- **Owner-side scheduler model:** the owner owns the schedule; the GC manages subs (the electrical, mechanical, and cooling-commissioning contractors, the design engineer, etc.); the schedule gives all parties one shared view.
+- **Contractual milestones:** EFA -> FA -> FR -> RFS per DH (per the contract's turnover dates).
 - **Calendar:** 7-day, 8 hours/day, no holidays (unless the new project changes it — confirm in Phase 1).
-- **FluidStack vs TeraWulf scope split:**
-  - CDUs: FluidStack scope (TeraWulf does not procure CDUs)
-  - Racks: FluidStack/owner-IT scope
-  - Mech room equipment, electrical infrastructure, yards, MMRs: TeraWulf scope
+- **Client vs owner scope split:**
+  - CDUs: client scope (the owner does not procure CDUs)
+  - Racks: client/owner-IT scope
+  - Mech room equipment, electrical infrastructure, yards, MMRs: owner scope
 - **WBS top-level pattern:** Milestones / Site & Shell / Per-DH (Construction + Cx) / Per-DH Procurement / Admin Building / MMRs
 - **Per-DH WBS pattern:** MR (Mech Room) / DH (Data Hall proper) / RF (Roof) / CD (Corridors) / Yard
 - **Naming convention:** `CONS-DH{n}-{room}-{seq}` for construction, `CX-DH{n}-{system}-{level}` for commissioning, `PROC-{system}-{n}` for procurement
-- **OCE/3 calendar conversion** (until OCE switches their MPP to 8h/day basis)
-- **Weekly refresh cadence** from OCE + MLP
+- **Electrical-contractor/3 calendar conversion** (until the electrical contractor switches their MPP to 8h/day basis)
+- **Weekly refresh cadence** from the electrical and mechanical contractors
 
 ## Decision rules
 
@@ -260,7 +267,7 @@ When in doubt:
 - **If a contractual milestone interpretation is ambiguous:** get the owner to define it. Don't assume.
 - **If a tie looks wrong but the prior schedule has it:** flag it, don't silently change it. Surface the question.
 - **If validation fails:** fix the underlying issue. Don't suppress the check.
-- **If OCE auto-matching produces low-confidence results:** build the crosswalk catalog manually as a one-time investment; don't ship bad auto-matches.
+- **If electrical-contractor auto-matching produces low-confidence results:** build the crosswalk catalog manually as a one-time investment; don't ship bad auto-matches.
 
 ## Output expectations
 
@@ -272,16 +279,16 @@ By Phase 7, the project should have these deliverables:
 - `Open-Items-By-Discipline.md` — chase list
 - `Assumptions-Register.md` — everything baked in
 - `Critical-Path-Analysis.md` — per-milestone backward trace
-- `OCE-MLP-Crosswalk-Catalog.xlsx` — leaf-to-aggregate map for weekly refresh
+- `Electrical-Mechanical-Crosswalk-Catalog.xlsx` — leaf-to-aggregate map for weekly refresh
 - Trade-specific question lists for next meetings
 - (Optional) Fragnet xlsx for mech / electrical commissioning
 - (Optional) P6 Layout xml for live status reporting
 
 Everything goes in `outputs/` in the project folder.
 
-## Starting a new TeraWulf project (quick-start)
+## Starting a new project (quick-start)
 
-When the user spins up a new Cowork project for the next TeraWulf build (e.g., CB5):
+When the user spins up a new Cowork project for the next build in the program:
 
 1. **Create the project folder** with this structure:
    ```
@@ -297,7 +304,7 @@ When the user spins up a new Cowork project for the next TeraWulf build (e.g., C
 
 4. **Run Phase 2 (Source Extraction)** — produce one extraction memo per source file. Stop at the Phase 2 checkpoint.
 
-5. **(Optional) Stand up the agentic workflow** in Claude Code — see `references/07-agentic-workflow-pattern.md` for the 11-agent persona pattern. Use the CB4 build as the reference implementation.
+5. **(Optional) Stand up the agentic workflow** in Claude Code — see `references/07-agentic-workflow-pattern.md` for the 11-agent persona pattern. Use the reference project build as the reference implementation.
 
 ## Maintaining this skill
 
