@@ -80,6 +80,19 @@ v1.16 (2026-05-22): Added reference 14 (scheduling basis -- the actuals and
                    milestone-treatment axes, both CPM passes, constraint codes,
                    and how float reads); registered it in the reference table.
                    Pairs with the build-brief's new `scheduling` block.
+v1.17 (2026-05-22): Harvested a sister-building-clone build via /harvest-lessons
+                   -- promoted 11 new lessons #41-#51 to 06-lessons-learned.md
+                   (repeating-unit numbering physical vs build-order; MEL
+                   filename is not provenance; re-pacing the shared energization
+                   chain on a stagger reversal; validating the basis XER up
+                   front; malformed TASKPRED columns; validator-recognised
+                   bookend codes; date-shift transforms don't survive a CPM run;
+                   clearing the source schedule's constraints on clone;
+                   per-segment duration compression; dual-constraint milestone
+                   pinning; procurement-as-deadline backward pass) and merged 2
+                   into existing lessons (#1 constraint direction, #26 cross-DH
+                   milestone chains). All promoted lessons sanitized to the
+                   skill's generic voice.
 -->
 
 # Data Center Schedule Toolkit

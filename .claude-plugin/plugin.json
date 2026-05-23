@@ -1,6 +1,6 @@
 {
   "name": "schedule-assistant",
-  "version": "0.5.6",
+  "version": "0.6.0",
   "description": "Full-lifecycle assistant for Primavera P6 / Oracle Primavera Cloud data center schedules. /start-project scaffolds and onboards a new project (folder structure, contractual-milestone interview, config files); /build-schedule creates a new schedule from a build-brief at any detail level (1-5), full-input or from a project description; /update-schedule maintains it through reviewed, independently verified change-sets; /harvest-lessons captures lessons from every build and update and promotes the keepers back into the bundled skill. Bundles the data-center-schedule domain skill (references, templates, validators).",
   "author": { "name": "Patrick Al Asseily" },
   "homepage": "https://github.com/infrabloom/schedule-assistant",

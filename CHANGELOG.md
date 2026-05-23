@@ -16,6 +16,25 @@ version was current at the time.
 
 ---
 
+## 0.6.0 — 2026-05-22 — Sister-building-clone lessons harvested into the skill
+
+- Ran `/harvest-lessons` on a sister-building-clone build. Promoted **11 new
+  lessons (#41–#51)** into the bundled skill's
+  `references/06-lessons-learned.md` and **merged 2** into existing lessons (#1
+  constraint direction, #26 cross-DH milestone chains). The new lessons cover the
+  sister-building-clone pattern: physical-vs-build-order unit numbering, MEL
+  provenance, re-pacing the shared energization chain on a stagger reversal,
+  validating the basis XER up front, malformed TASKPRED columns,
+  validator-recognised bookend codes, why a date-shift transform does not survive
+  a CPM run, clearing a cloned schedule's own constraints, per-segment duration
+  compression, dual-constraint milestone pinning, and procurement-as-deadline
+  modelling.
+- All promoted lessons were sanitized to the skill's generic voice — no project,
+  building, owner, or contractor names. The harvest itself ran against an older
+  installed plugin; this entry re-applies its result onto the current repo
+  (0.5.6 / skill v1.16), so the version line is 0.6.0 and the skill is **v1.17**,
+  not the 0.6.0/v1.15 the harvest session originally drafted.
+
 ## 0.5.6 — 2026-05-22 — Scheduling basis is now explicit
 
 - New build-brief / `project.yaml` block **`scheduling`** with two fields:

@@ -23,6 +23,16 @@ Use `CS_MEOA` (Finish On or After) as a drop-in replacement. It works in OPC and
 
 **Rule:** Run a post-build grep on the XER for `CS_MEO\t` and `CS_MSO\t` (note the tab — to avoid matching `CS_MEOA`/`CS_MEOB`/`CS_MSOA`). Zero hits is the target.
 
+**Constraint direction — cross-check against the prior schedule (added from a sister-building build, 2026-05-22):**
+Choosing a working code is not enough; the *direction* must be right too. A
+contractual "deliver no later than" milestone needs the on-or-before ceiling
+`CS_MEOB`, not the on-or-after floor `CS_MEOA` — the ceiling surfaces negative
+float when the logic will miss the date, while the floor silently lets the date
+push out. On a sister-building build, the build-brief draft specified `CS_MEOA`
+for contractual deliver-by milestones; the prior/sister schedule correctly used
+`CS_MEOB`. Cross-check constraint direction against the prior / sister schedule
+before committing it in a brief. *(Source: sister-building build, lessons-log LL-003.)*
+
 ---
 
 ## 2. `TK_Active` Without `act_start_date` → PRM-009010001
@@ -437,6 +447,17 @@ These chains inflated DH1 EFA by ~9 weeks vs reality. We dropped 285 cross-DH FS
 - The XER Builder should refuse to create FS ties between activities in different DH WBSes (warn loudly)
 - The Logic Auditor should flag every existing cross-DH FS tie for user review
 
+**Related — cross-DH *milestone* chains collapse the stagger on a greenfield reschedule (added from a sister-building build, 2026-05-22):**
+The same anti-pattern shows up on milestones, not just crew activities. A
+reference schedule also enforced its DH stagger with cross-DH milestone chains
+(`MS-DH4-EFA -> MS-DH3-EFA -> MS-DH2-EFA -> MS-DH1-EFA`, FS, 0 lag). Cloned into
+a greenfield sister building with no actuals, those chains forced all four DH
+milestones onto a single date.
+- Cut cross-unit milestone ties when cloning into a fresh schedule.
+- Enforce the repeating-unit stagger with a Start constraint (`CS_MSOA`) on each
+  unit's start milestone, not with unit-to-unit chains.
+*(Source: a sister-building build, lessons-log LL-009.)*
+
 ---
 
 ## 27. Forgotten DH Symmetry Check
@@ -645,6 +666,232 @@ by absolute OutlineLevel mis-assigned every DH2 activity.
 
 **Validation:**
 - Spot-check section assignment on the trade file with the deepest nesting.
+
+---
+
+# Sister-Building Clone Lessons (added 2026-05-22)
+
+These lessons were captured building a new data-center schedule as a
+sister-building clone of an existing building, and promoted from that project's
+`lessons-log.md` via `/harvest-lessons`. Sister-building clones are a recurring
+pattern — read #41-#43 before starting one.
+
+---
+
+## 41. Confirm Whether Repeating-Unit Numbering Is Physical or Build-Order
+
+**What happened:** A new building was built as a clone of its sister building.
+The first transform design assumed the data-hall numbers were build-order labels
+and planned to relabel the sister building's first-built hall (DH4) as the new
+building's DH1. The owner's electrical power plan then showed the DH numbers are
+fixed physical positions (DH1 = leftmost hall in both buildings; the MMR rooms
+sit with DH1 in both). Assuming the wrong one mis-maps every unit's rooms, yards,
+and milestones.
+
+**Fix:** Before designing a sister-building transform, get the layout / key plan
+and confirm whether the repeating-unit numbering is a *physical position* or a
+*build-order label*. If physical, keep the labels and reverse the build
+*direction* via per-unit date shifts; if build-order, relabel. The transform
+stays systematic either way.
+
+**Validation:** Cross-check the unit numbering against the owner's key/power plan
+before Phase 2 logic design. Confirm where fixed rooms (MMR, MEP rooms) sit
+relative to unit 1.
+
+*(Source: sister-building build, lessons-log LL-001.)*
+
+---
+
+## 42. A MEL Filename Is Not Provenance
+
+**What happened:** Three files named as the new project's Master Equipment List
+turned out to contain the sister building's equipment data — the wrong footprint
+(areas, room count, and Admin-building rows the new building does not have).
+
+**Fix:** Always verify a MEL's footprint (areas, room count, equipment tags)
+against the project before trusting it as the procurement source of truth. A
+filename naming the project does not mean the data is the project's.
+
+**Validation:** On MEL intake, reconcile the area list, room count, and a sample
+of equipment tags against the project's known footprint. Flag any mismatch as an
+open item before using the MEL for procurement logic.
+
+*(Source: sister-building build, lessons-log LL-002.)*
+
+---
+
+## 43. Reversing a Unit Stagger Re-Paces the Shared Site / Energization Chain
+
+**What happened:** The new building reversed the sister building's data-hall
+build order (DH4-first → DH1-first). The shared Site & Shell / utility-
+energization chain could not simply ride the generic project shift — the sister
+building had paced its MV switchgear energization to its *second*-built hall.
+Carried straight across, that left the new building's first hall energized after
+its contractual FA — negative float on a contractual milestone.
+
+**Fix:** When a sister-building build reverses the repeating-unit sequence,
+re-pace the shared infrastructure feeding the units (energization, site power,
+the long-lead procurement behind it) to the NEW first unit. It does not move with
+the generic project shift; leaving it there silently breaks the first unit's
+milestones.
+
+**Validation:** After the unit shifts, check every energization milestone against
+the *first* unit's EFA/FA. Any energization landing after the first unit's FA is
+the bug.
+
+*(Source: sister-building build, lessons-log LL-004.)*
+
+---
+
+## 44. A "Good-Schedule" Input Is Not Necessarily Validation-Clean
+
+**What happened:** The sister-building XER used as the new project's structural
+basis itself failed `validate_xer.py` with 5 issues — pre-existing orphan
+activities, a duplicate procurement activity, and a pct/remain/status
+inconsistency.
+
+**Fix:** Run `validate_xer.py` on a good-schedule input *up front*, before the
+build, so the repairs to the basis schedule's own defects are scoped in advance
+rather than discovered mid-build. A schedule being a sound logic/duration source
+does not mean it passes validation.
+
+**Validation:** Run `validate_xer.py` + `cohesion_audit.py` + `duplicate_audit.py`
+on every good-schedule / template input at Phase 1, before cloning.
+
+*(Source: sister-building build, lessons-log LL-005.)*
+
+---
+
+## 45. Inspect the TASKPRED Schema When Cloning an XER — Columns Can Be Malformed
+
+**What happened:** The basis XER's TASKPRED table had `aref` and `arls` merged
+into a single column literally named `aref arls` (space-joined, not
+tab-separated). `validate_xer` reads them as two separate keys, so every TASKPRED
+row failed the aref/arls check until the build split the column back into two.
+
+**Fix:** When cloning an XER, inspect the `%F` header of the `TASKPRED` table for
+merged or malformed column names before trusting the schema. Do not assume an
+exported XER is well-formed.
+
+**Validation:** Parse and print the `TASKPRED` `%F` column list; confirm each
+expected field is its own tab-separated column.
+
+*(Source: sister-building build, lessons-log LL-006.)*
+
+---
+
+## 46. Project Bookend Milestones Need Validator-Recognised Codes
+
+**What happened:** `validate_xer`'s orphan check exempts project start/end
+milestones via `is_start_ms` / `is_end_ms`, which key on the task *code*
+containing SWD/START/NTP (start) or RFS/PCO/COMPL/TCO (end). The basis schedule's
+bookends had codes with no such keyword ("Construction Start", "Overall Project
+Completion"), so both failed the orphan check.
+
+**Fix:** Give project start/end milestones codes the validator recognises — e.g.
+`MS-PM-START` / `MS-PM-COMPL`. Expect a side effect: once a milestone is
+recognised as a project-start milestone, the W3 warning then surfaces every
+activity riding it as its only predecessor (an intentional procurement-from-day-1
+pattern is fine — it is a WARN, not a FAIL).
+
+**Validation:** Run the `validate_xer.py` orphan check; confirm the bookend
+milestones are exempted and not flagged as orphans.
+
+*(Source: sister-building build, lessons-log LL-007.)*
+
+---
+
+## 47. A Date-Shift Transform Does Not Survive an OPC CPM Run
+
+**What happened:** Early build attempts shifted the basis schedule's *target
+dates* into the new project's timeframe. On OPC import the CPM ignored those
+dates and recomputed everything from the logic, landing the schedule ~278 days
+late with all units collapsed onto each other.
+
+**Fix:** A CPM schedule's dates come from *logic* — durations, predecessor ties,
+constraints, the data date — not from target dates. Build the logic; never
+deliver a schedule whose dates were set by hand without running the critical
+path.
+
+**Validation:** Run a forward + backward CPM pass before delivery and confirm the
+computed dates match intent. If hand-set target dates and CPM-computed dates
+diverge, the logic — not the dates — is what needs fixing.
+
+*(Source: sister-building build, lessons-log LL-008.)*
+
+---
+
+## 48. Clear the Source Schedule's Own Constraints When Cloning an XER
+
+**What happened:** The basis schedule carried 16 of its own activity constraints
+(procurement deadlines, energization dates) pinned to the sister building's
+dates. Cloned unchanged, they produced phantom negative float in the new project
+— one procurement activity showed -153 days.
+
+**Fix:** When cloning an XER, clear every `cstr_type` / `cstr_date` /
+`cstr_type2` / `cstr_date2` on import, then re-apply only the constraints the new
+project actually intends.
+
+**Validation:** After the clone, grep TASK rows for any non-empty `cstr_type`;
+confirm each surviving constraint is intentional for the new project. Negative
+float on a procurement activity is the tell that a stale one slipped through.
+
+*(Source: sister-building build, lessons-log LL-010.)*
+
+---
+
+## 49. To Hit Fixed Milestone Dates, Compress Durations Per Segment, Not Per Unit
+
+**What happened:** A two-segment per-unit compression (pre-EFA, post-EFA) landed
+the intermediate FA milestones a few days off. Once the milestones were pinned,
+that error cascaded into negative float on the downstream FR/RFS.
+
+**Fix:** To make a CPM land on fixed milestones, scale durations in one segment
+*per milestone-to-milestone span* — here three: pre-EFA, EFA→FA, FA→RFS — each
+scaled to its exact contract window.
+
+**Validation:** After compression, confirm each milestone-to-milestone span
+equals its contract window exactly; check the downstream milestones for negative
+float.
+
+*(Source: sister-building build, lessons-log LL-011.)*
+
+---
+
+## 50. Pin a Milestone to a Date With a Dual Constraint
+
+**What happened:** `CS_MEOB` (Finish On or Before) alone left positive float
+whenever the logic landed a milestone early — the milestone floated instead of
+sitting on its contractual date.
+
+**Fix:** To pin a milestone exactly on its date at zero float, apply `CS_MEOB`
+*plus* a secondary `CS_MSOA` (Start On or After) at the same date. Both are
+OPC-safe (see lesson #1).
+
+**Validation:** After the CPM run, confirm each pinned milestone has zero total
+float and lands exactly on its contract date.
+
+*(Source: sister-building build, lessons-log LL-012.)*
+
+---
+
+## 51. Procurement Can Be Modeled as a Deadline Tracker via a Backward Pass
+
+**What happened:** Procurement was on the critical path and the PM directed it be
+assumed on-time. Stretching each procurement activity's duration to its late
+finish (from a CPM backward pass) sets it at exactly zero total float — and its
+duration then reads as the *maximum allowable lead time* before it moves a
+milestone.
+
+**Fix:** To turn procurement into an explicit delivery-deadline / chase list, run
+a backward pass and stretch each procurement activity to its late finish. The
+resulting duration is the latest the equipment can deliver without moving a
+milestone; sort ascending and the shortest leads are the tightest chase items.
+
+**Validation:** Confirm every stretched procurement activity sits at zero total
+float; spot-check that lengthening one by a day pushes its milestone by a day.
+
+*(Source: sister-building build, lessons-log LL-013.)*
 
 ---
 
