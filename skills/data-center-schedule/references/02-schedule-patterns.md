@@ -6,38 +6,41 @@ Distilled patterns from the reference project and the 3 P6 reference templates. 
 
 ## 1. WBS Hierarchy (Level 1 — typical 7-8 branches)
 
+Each line below shows the WBS **name** only. The WBS **code** (`01`, `02`, …) is a separate
+field, never embedded in the name (see WBS-hygiene rule at the end of this section).
+
 ```
 [Project Code]
-├── 01 Milestones
+├── Milestones                          (code: 01)
 │   ├── Contractual (EFA-DHn, FA-DHn, MEC, TCO, PCO)
 │   ├── Site (AFEED, BFEED, East Mains, West Mains)
 │   └── Internal gates (M1-Mn, G1-Gn)
-├── 02 Procurement
+├── Procurement                         (code: 02)
 │   ├── By MEL keyplan zone (A, B, C ... R) OR
 │   ├── By equipment family (MV / LV / UPS / Cooling / Racks / Misc)
 │   └── Long-lead items flagged separately
-├── 03 Site & Shell
+├── Site & Shell                        (code: 03)
 │   ├── Sitework / Civil
 │   ├── Foundation / Slab
 │   ├── Shell / Envelope
 │   └── Utilities tie-in (utility transformer, AFEED, BFEED)
-├── 04 Construction (the big branch — per-Area)
+├── Construction                        (code: 04)  (the big branch — per-Area)
 │   ├── Area 1 (DH + Mech Room + Yards + Roof)
 │   ├── Area 2 (DH + Mech Room + Yards + Roof)
 │   ├── Area 3 (DH + Mech Room + Yards + Roof)
 │   ├── Area 4 (DH + Mech Room + Yards + Roof)
 │   └── Admin Building (if present)
-├── 05 Final Inspections
+├── Final Inspections                   (code: 05)
 │   ├── AHJ inspections (electrical, mech, fire, building)
 │   ├── Pre-commissioning walkdowns
 │   └── Final punchlist
-├── 06 Commissioning
+├── Commissioning                       (code: 06)
 │   ├── L1 FAT (Factory Acceptance Test)
 │   ├── L2 PFC (Pre-Functional Checks)
 │   ├── L3 Functional (per-system: MV, LV, UPS, CDU, CHW, Gen, ATS)
 │   ├── L4 IST (Integrated Systems Test)
 │   └── L5 Load Bank IST
-└── 07 Closeout
+└── Closeout                            (code: 07)
     ├── Documentation handover
     ├── Owner training
     └── Final acceptance
@@ -47,6 +50,16 @@ Distilled patterns from the reference project and the 3 P6 reference templates. 
 - Some projects fold Site & Shell into Construction.
 - Some projects break Commissioning into per-DH branches instead of by L-level.
 - Admin/Office buildings may get their own L1 branch if scope is significant.
+
+**WBS-hygiene rule (added 2026-06-02):**
+
+The OPC/P6 WBS view displays each node as **`<code> <name>`**. Therefore:
+- The **name is the label only** — never embed the WBS number/code in the name
+  (a node coded `04` named "04 Construction" shows "04 04 Construction").
+- The **code** carries the number/short tag, is unique among siblings, and is **different
+  from the name** (code == name shows e.g. "East East").
+- Keep sibling codes **gapless and in sync** with any number; when you remove a WBS
+  section, renumber siblings so there is no gap and no code/name drift.
 
 ---
 
@@ -257,6 +270,10 @@ For most DC schedules, **5-day primary + 6-day commissioning** is the common pat
 
 **Rule:** Use the minimum constraints needed. Over-constraining the schedule masks logic errors and prevents the CPM engine from showing real float.
 
+**Finish-milestone default (added 2026-06-02):** Finish milestones default to **Finish-On-or-Before**
+(`CS_MEOB`-family) at their contract date, unless the brief explicitly calls for another constraint.
+Add to the QA gate: flag any contract finish milestone that lacks an on-or-before constraint.
+
 ---
 
 ## 10. Open-Items / Assumptions Register Pattern
@@ -270,6 +287,31 @@ Every assumption should be tracked. Suggested columns:
 | ... | | | | | | |
 
 Maintain this throughout the project. At every CHECKPOINT, walk PM through the open items. At Phase 7, deliver as a standalone artifact.
+
+---
+
+## 11. Activity-ID Naming Convention (added 2026-06-02)
+
+Format: `<PHASE>-<AREA>-<LOCATION?>-<NNNN>` — the 4-digit sequence is ALWAYS the terminal
+token; number **by 10 from 1000 per section**; keep prefixes stable; do not end an ID with
+a bare letter; ≤ a few dashes.
+
+- **Construction = location only.** Drop a subarea token that merely repeats the area
+  (a data-hall-floor activity under area "DHn" needs no "DH" subarea). **No East/West in the
+  ID** (location comes from the WBS); add a discipline token (MECH/ELEC) only if essential.
+  **Do not put the system in the ID** (no equipment/system tokens) — system & discipline
+  belong in **activity codes**, assigned separately.
+- **Commissioning = hybrid**: `CX-<AREA>-<Cx-level/group>-<NNNN>` (keep L2/L3/L4/L5/etc.,
+  number the rest).
+- **Procurement** = `PROC-<AREA>-<MECH|ELEC>-<NNNN>`; the ID discipline token must match the
+  procurement WBS discipline (audit for mismatches).
+- **Milestones**: leave contractual suffixes (EFA/FA/FR/RFS) — meaningful and pattern-bound;
+  never renumber.
+- Assign from this scheme **at build time**. If a re-ID is ever needed, keep a retained
+  old→new crosswalk, apply via the patcher (relationships survive — keyed by task-id), and
+  validate independently (see the verifier note in `docs/changeset-schema.md`). A mid-execution
+  re-ID re-imports to OPC as a fresh ID set (loses incremental-update/actuals matching) —
+  only do it early-stage.
 
 ---
 

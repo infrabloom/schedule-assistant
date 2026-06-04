@@ -895,6 +895,68 @@ float; spot-check that lengthening one by a day pushes its milestone by a day.
 
 ---
 
+# CB-series Cleanup & Weekly-Refresh Lessons (added 2026-06-02)
+
+## 52. A Mid-Cycle Owner/EPC Export Overtakes a Staged Change-Set
+When an owner/EPC review happens mid-update, the schedule they hand back (edited directly
+in OPC and re-exported) usually already contains most of what your staged-but-uncommitted
+change-set intended — plus more. Do NOT re-apply the stale change-set: its `expect` guards
+will fail and you would double-apply. Instead: adopt the fresh export as the new base,
+capture the base→export diff as an OPC-direct reconciliation entry in the CHANGELOG, then
+fold only the *remaining* delta as a new change-set. **Diff-then-fold, never blind re-apply.**
+
+## 53. Mirroring One Unit to Another — Match % Complete, Not Raw Remaining
+When asked to make one repeating unit mirror another (concurrent crews), copy status +
+actual_start + **percent-complete scaled to each unit's own target duration** — never copy
+raw remaining hours. Per-unit target durations drift apart over a project, so a literal
+copy can yield remaining > target (invalid). Do not overwrite already-complete history, and
+do not overstate a unit that is genuinely behind. Confirm the exclusion set explicitly.
+
+## 54. A Third-Party Interface Fragnet Must Track Their Published Finish Dates
+When modeling another party's scope (utility, EPC) as a fragnet feeding an interface
+milestone, anchor each in-progress activity's remaining duration to THEIR published finish
+date (`remaining = their_finish − data_date`), not a %-of-your-duration guess. A
+Finish-On-or-Before constraint will NOT pull an over-long forecast back — the remaining must
+be right. Tell-tale: a downstream contract milestone moving later right after you add an
+interface fragnet means the fragnet's remaining durations overrun the interface date.
+
+## 55. Unlinked Parallel Chains for One Scope Hide Critical Path
+Two chains describing the same physical scope with no relationship between them suppress a
+real driver — the CPM literally cannot "see" the dependency. Look for an equipment
+"set/install" activity with no successor into the energization/commissioning chain: that is
+a hidden gate. Consolidate and link. If the correct link moves a contractual milestone,
+that movement is information (expedite the long-lead item), not a reason to omit the link.
+
+## 56. Before Adding a Fragnet, Check Whether the Scope Is Already Modeled
+When a request says "add/build X," first grep the schedule for existing activities/WBS
+covering X — by name keyword AND by the milestone/feed it drives — before adding. If it
+exists (even coarser, or under a different name), ENRICH the existing chain rather than
+building a parallel one. Add-then-consolidate is expensive and pollutes the audit trail.
+"Is this already modeled, just coarser or under a different name?" is a standard pre-build check.
+
+## 57. Define the Trade Crosswalk by Structural Selectors, Not Leaf-IDs  (extends #22)
+A trade crosswalk keyed to leaf row-IDs (e.g. `idN` from a text dump or a prior export) does
+NOT survive the trade re-exporting or renumbering their file. Define each high-level mapping
+by **stable structural selectors** — the file's outline section path + leaf-name keyword (the
+MS-Project outline is a self-describing rollup key) — or by equipment IDs. When the trade
+changes format/granularity, name-by-UID matching returns garbage; resolve old→new leaves by
+(name + outline number) and roll up by section. (See also #22 Many-to-One Aggregation.)
+
+## 58. Retie / Cycle / Reroute Hazards  (extends #25)
+Three relationship-editing hazards, all seen repeatedly:
+1. **Same-pair cycle.** Before adding a "missing" tie X→Y, check whether the reverse edge
+   Y→X already exists — per-unit logic is not always symmetric, and adding the opposite
+   direction makes a 2-node cycle.
+2. **Earlier-swing heuristic.** A change-set that moves any milestone *earlier* by more than
+   a few days is suspect — almost always a cycle or a disconnection, not a win. Read the
+   milestone preview before approving.
+3. **No reroute on a hub.** Never use `remove_activity reroute=true` on a high-degree node
+   (a milestone, or any activity with several predecessors AND successors): it generates
+   preds×succs ties (cartesian, including spurious cross-unit edges — the consolidation
+   caveat). Remove with `reroute=false` and add the specific bridging tie(s) explicitly.
+
+---
+
 ## How to use these lessons on a new project
 
 1. **Read this entire file before Phase 1.** Don't repeat these mistakes.

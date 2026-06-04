@@ -110,3 +110,11 @@ After that, each update cycle is:
 The bundled `data-center-schedule` skill provides the domain framework - the
 7-phase method, the 14 references, the P6 templates, and the validators - that
 both commands run on.
+
+## 8. Cloud-synced project folders (added 2026-06-02)
+
+On a cloud-synced project folder (Google Drive / OneDrive / SharePoint), files may be
+cloud-only placeholders. Do not run the pipeline scripts directly against the mount —
+`awk` / `grep` / direct reads can race the lazy hydration and fail. Stage each input to
+local scratch (cp with retry), run conversion / validators / apply there, then publish
+the resulting XERs + backup back to the project folder.

@@ -383,6 +383,16 @@ Renames, renumbers, or reparents a WBS node. Identify the node by its current `p
    block it. Issues carried over from `base_xer` are reported, not blocked.
 9. The verifier diffs `base_xer` vs `update_xer` and confirms the diff equals this
    change-set exactly — any unexplained delta is flagged.
+
+   **Verifier note (added 2026-06-02):** `verify_changeset` keys relationships by
+   `{predecessor_code, successor_code}`. A change-set that **re-codes** activities (renames
+   task_codes) therefore reports large "unexplained" relationship diffs even though the
+   patcher applied it correctly (relationships are keyed by task-id internally and survive).
+   For mass re-codes / renames, do not rely on the verifier verdict — confirm correctness
+   via `validate_xer` (codes unique + case-insensitive, no cycles, WBS valid),
+   `duplicate_audit`, `predict_milestones --compare`, unchanged task / relationship counts,
+   and a retained old→new crosswalk.
+
 10. On success the patcher appends the change-set to `CHANGELOG.md` — the rolled-up
     historical archive of every change across the project lifecycle.
 11. `update_xer` is import-ready but **not yet scheduled** — OPC must run F9 on import.

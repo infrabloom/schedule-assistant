@@ -4,6 +4,15 @@ description: "Use this skill for hyperscale data center scheduling work — buil
 ---
 
 <!-- Changelog
+v1.18 (2026-06-02): Lessons #52–#58 (mid-cycle export reconciliation; %-mirror;
+                   third-party fragnet calibration; hidden parallel-chain critical
+                   path; enrich-don't-duplicate; crosswalk structural selectors;
+                   retie/cycle/reroute hazards). Patterns: activity-ID naming
+                   convention, WBS code+name hygiene, finish-milestone
+                   On-or-Before default. Docs: cloud-staging guidance in
+                   setup-guide.md; verifier code-keying caveat in
+                   changeset-schema.md. Tooling TODO captured in
+                   scripts/review_changeset.py.
 v1.0 (2026-05-12): Initial release from the reference project build (v1 -> v4.15 cycle)
 v1.1 (2026-05-17): Folded in the reference project's v2/v3 rebuild — electrical-contractor/3
                    calendar conversion, many-to-one aggregation, retie residue, cross-DH FS

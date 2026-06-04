@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+# TODO (2026-06-02 lessons promotion, follow-up):
+#   - Same-pair circular-dependency lint: intersect each activity's predecessor and
+#     successor sets; on every `add_relationship`, check for a pre-existing reverse edge
+#     and hard-fail before CPM with the offending pair named (lessons #58.1).
+#   - "Milestone moved EARLIER by > a few days" heuristic in the impact preview output
+#     (almost always a cycle or disconnection, not a win — lessons #58.2).
 """
 review_changeset.py - the Change-Set Impact Preview, for the approver.
 
