@@ -1,5 +1,12 @@
 # schedule-assistant
 
+> **⚠️ Frozen at v0.6.0 — superseded by v2.**
+> This repo is archived and no longer developed. The plugin was rebuilt as
+> **schedule-assistant v2** — single `/schedule` front door, validated
+> change-set pipeline with independent verification, sanitization CI gate —
+> and the marketplace cut over at v2.1.0. Install and develop from
+> **[github.com/infrabloom/schedule-assistant-v2](https://github.com/infrabloom/schedule-assistant-v2)**.
+
 A full-lifecycle assistant for Primavera P6 / Oracle Primavera Cloud (OPC) data
 center schedules. It does two jobs:
 
